@@ -14,15 +14,20 @@ import java.util.Map;
  */
 public class SearchRequest extends StringRequest {
 
-    private static final String SEARCH_REQUEST_URL = "http://52.36.12.106/api/v1/room/search/address";
+    private static final String SEARCH_REQUEST_URL = "http://52.36.12.106/api/v1/room/search/realestate";
     private Map<String, String> params;
 
-    public SearchRequest(String street,String district,String ward, String city, Response.Listener<String> listener){
+    public SearchRequest(String street,String district,String ward, String city,int minPrice, int maxPrice, double minArea, double maxArea, Response.Listener<String> listener){
         super(Method.POST,SEARCH_REQUEST_URL, listener, null);
         params = new HashMap<>();
 //        String creds = String.format("%s:%s","samhv.ict@gmail.com","w8c8aaff");
 //        String auth = "Basic " + Base64.encodeToString(creds.getBytes(), Base64.DEFAULT);
 //        params.put("Authorization", auth);
+
+        params.put("minPrice",minPrice +"");
+        params.put("maxPrice",maxPrice + "");
+        params.put("minArea",minArea + "");
+        params.put("maxArea",maxArea + "");
         params.put("street" , street);
         params.put("district", district);
         params.put("ward", ward);

@@ -155,9 +155,9 @@ public class HomeFragment extends Fragment {
             try {
                 URL url = new URL(URL_SELECT);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-                String newUser = "samhv.ict@gmail.com" +":"+"w8c8aaff";
-                String encode = Base64.encodeToString(newUser.getBytes(), Base64.DEFAULT);
-                httpURLConnection.setRequestProperty("Authorization","Basic "+encode);
+//                String newUser = "samhv.ict@gmail.com" +":"+"w8c8aaff";
+//                String encode = Base64.encodeToString(newUser.getBytes(), Base64.DEFAULT);
+//                httpURLConnection.setRequestProperty("Authorization","Basic "+encode);
                 httpURLConnection.connect();
 
                 InputStream inputStream = httpURLConnection.getInputStream();
@@ -198,19 +198,9 @@ public class HomeFragment extends Fragment {
 
 
                     //add kinh vi do
-                    //append dia chi
-//                    String street = roomModel.getStreet();
-//                    String ward = roomModel.getWard();
-//                    String district = roomModel.getDistrict();
-//                    String city = roomModel.getCity();
-//                    String address = street + "-" + ward + "-" + district + "-" + city;
-//                    //add vao model
-//                    LatAndLng kinhvi = new LatAndLng(roomModel, address);
-//                    roomModel.setLongtitude(kinhvi.getLat());
-//                    roomModel.setLatitude(kinhvi.getLng());
                     //getkinh do vi do version 2
-                    roomModel.setLatitude(Double.parseDouble(finalObject.optString("latitude").toString()));
-                    roomModel.setLongtitude(Double.parseDouble(finalObject.optString("longitude").toString()));
+//                    roomModel.setLatitude(Double.parseDouble(finalObject.optString("latitude").toString()));
+//                    roomModel.setLongtitude(Double.parseDouble(finalObject.optString("longitude").toString()));
 
                     // adding the final object in the list
                     roomModelList.add(roomModel);

@@ -90,8 +90,8 @@ public class SearchResult extends AppCompatActivity {
 //                    roomModel.setLongtitude(kinhvi.getLat());
 //                    roomModel.setLatitude(kinhvi.getLng());
                 //getkinh do vi do version 2
-                roomModel.setLatitude(Double.parseDouble(finalObject.optString("latitude").toString()));
-                roomModel.setLongtitude(Double.parseDouble(finalObject.optString("longitude").toString()));
+//                roomModel.setLatitude(Double.parseDouble(finalObject.optString("latitude").toString()));
+//                roomModel.setLongtitude(Double.parseDouble(finalObject.optString("longitude").toString()));
 
                 // adding the final object in the list
                 roomModelList.add(roomModel);

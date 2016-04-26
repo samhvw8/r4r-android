@@ -39,8 +39,8 @@ public class SearchFragment extends Fragment {
         final EditText etMinPrice = (EditText) rootView.findViewById(R.id.etMinPrice);
         final EditText etMaxPrice = (EditText) rootView.findViewById(R.id.etMaxPrice);
 
-        final EditText etArea = (EditText) rootView.findViewById(R.id.etArea);
-
+        final EditText etMinArea = (EditText) rootView.findViewById(R.id.etMinArea);
+        final EditText etMaxArea = (EditText) rootView.findViewById(R.id.etMaxArea);
         final Button btnSearch = (Button) rootView.findViewById(R.id.btnSearch);
 
         btnSearch.setOnClickListener(new View.OnClickListener() {
@@ -50,6 +50,10 @@ public class SearchFragment extends Fragment {
                 final String district = etDistrict.getText().toString();
                 final String ward = etWard.getText().toString();
                 final String city = etCity.getText().toString();
+                final int minPrice = Integer.parseInt(etMinPrice.getText().toString());
+                final int maxPrice = Integer.parseInt(etMaxPrice.getText().toString());
+                final double minArea = Double.parseDouble(etMinArea.getText().toString());
+                final double maxArea = Double.parseDouble(etMaxArea.getText().toString());
 
                 Response.Listener<String> responseListener = new Response.Listener<String>() {
                     @Override
@@ -78,7 +82,7 @@ public class SearchFragment extends Fragment {
                 };
 
 
-                SearchRequest searchRequest = new SearchRequest(street,district,ward,city,responseListener);
+                SearchRequest searchRequest = new SearchRequest(street,district,ward,city,minPrice,maxPrice,minArea,maxArea,responseListener);
                 RequestQueue queue = Volley.newRequestQueue(getActivity().getApplicationContext());
                 queue.add(searchRequest);
             }
