@@ -1,4 +1,4 @@
-package com.example.son.r4rdemov2;
+package com.example.son.requests;
 
 import android.util.Base64;
 
@@ -39,12 +39,12 @@ public class SearchRequest extends StringRequest {
         return params;
     }
 
-    @Override
-    public Map<String, String> getHeaders() throws AuthFailureError {
-        HashMap<String, String> params = new HashMap<String, String>();
-        String creds = String.format("%s:%s","samhv.ict@gmail.com","w8c8aaff");
-        String auth = "Basic " + Base64.encodeToString(creds.getBytes(), Base64.DEFAULT);
-        params.put("Authorization", auth);
-        return params;
-    }
+//    @Override
+//    public Map<String, String> getHeaders() throws AuthFailureError {
+//        HashMap<String, String> params = new HashMap<String, String>();
+//        String creds = String.format("%s:%s","samhv.ict@gmail.com","w8c8aaff");
+//        String auth = "Basic " + Base64.encodeToString(creds.getBytes(), Base64.DEFAULT);
+//        params.put("Authorization", auth);
+//        return params;
+//    }
 }

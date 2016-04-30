@@ -15,11 +15,13 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
 import com.example.son.r4rdemov2.R;
-import com.example.son.r4rdemov2.SearchRequest;
+import com.example.son.requests.SearchRequest;
 import com.example.son.r4rdemov2.SearchResult;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Objects;
 
 /**
  * Created by Son on 4/12/2016.
@@ -50,10 +52,37 @@ public class SearchFragment extends Fragment {
                 final String district = etDistrict.getText().toString();
                 final String ward = etWard.getText().toString();
                 final String city = etCity.getText().toString();
-                final int minPrice = Integer.parseInt(etMinPrice.getText().toString());
-                final int maxPrice = Integer.parseInt(etMaxPrice.getText().toString());
-                final double minArea = Double.parseDouble(etMinArea.getText().toString());
-                final double maxArea = Double.parseDouble(etMaxArea.getText().toString());
+                final String nullString = "";
+                final int minPrice;
+                final int maxPrice;
+                final double minArea;
+                final double maxArea;
+
+                if(!nullString.equals(etMinPrice.getText().toString())){
+                    minPrice = Integer.parseInt(etMinPrice.getText().toString());
+                }
+                else {
+                    minPrice = 0;
+                }
+
+                if(!nullString.equals(etMaxPrice.getText().toString())) {
+                    maxPrice = Integer.parseInt(etMaxPrice.getText().toString());
+                }else {
+                    maxPrice = 1000000000;
+                }
+
+                if(!nullString.equals(etMinArea.getText().toString())) {
+                    minArea = Integer.parseInt(etMinArea.getText().toString());
+                }else {
+                    minArea = 0;
+                }
+
+                if(!nullString.equals(etMaxArea.getText().toString())) {
+                    maxArea = Integer.parseInt(etMaxArea.getText().toString());
+                }else {
+                    maxArea = 1000000000;
+                }
+
 
                 Response.Listener<String> responseListener = new Response.Listener<String>() {
                     @Override
