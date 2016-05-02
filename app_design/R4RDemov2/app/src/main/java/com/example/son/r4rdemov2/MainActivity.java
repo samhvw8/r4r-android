@@ -1,5 +1,7 @@
 package com.example.son.r4rdemov2;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.app.FragmentManager;
 import android.support.design.widget.NavigationView;
@@ -12,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.son.fragments.HomeFragment;
+import com.example.son.fragments.LoginResult;
 import com.example.son.fragments.SearchFragment;
 import com.example.son.fragments.UserFragment;
 import com.google.android.gms.maps.GoogleMap;
@@ -22,6 +25,12 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback{
 
     SupportMapFragment supportMapFragment;
+    public static final String MyPREFERENCES = "MyPrefs";
+    public static final String Name = "name";
+    public static final String Phone = "phone";
+    public static final String Email = "email";
+    public static final String Status = "status";
+    public static final String CreatedDay = "created_at";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,13 +102,21 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
 
         FragmentManager fm = getFragmentManager();
+        SharedPreferences sharedPreferences = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
+        String statusRef = sharedPreferences.getString(Status, null);
+        boolean status = Boolean.parseBoolean(statusRef);
 
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
             fm.beginTransaction().replace(R.id.content_frame,new HomeFragment()).commit();
         } else if (id == R.id.nav_user) {
-            fm.beginTransaction().replace(R.id.content_frame,new UserFragment()).commit();
+            if(status){
+                fm.beginTransaction().replace(R.id.content_frame, new LoginResult()).commit();
+            }else {
+                fm.beginTransaction().replace(R.id.content_frame,new UserFragment()).commit();
+            }
+
         } else if (id == R.id.nav_search) {
             fm.beginTransaction().replace(R.id.content_frame, new SearchFragment()).commit();
         }

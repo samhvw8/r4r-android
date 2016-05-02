@@ -1,6 +1,9 @@
 package com.example.son.r4rdemov2;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.DisplayMetrics;
@@ -16,7 +19,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.son.fragments.LoginResult;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -29,6 +34,14 @@ public class PopLogin extends Activity {
 
 
     private static final String LOGIN_REQUEST_URL = "http://52.36.12.106/api/v1/login";
+    public static final String MyPREFERENCES = "MyPrefs";
+    public static final String Name = "name";
+    public static final String Phone = "phone";
+    public static final String Email = "email";
+    public static final String Status = "status";
+    public static final String CreatedDay = "created_at";
+    SharedPreferences sharedPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +62,8 @@ public class PopLogin extends Activity {
         final EditText etPassword = (EditText) findViewById(R.id.etPassword);
         final Button btnPopLogin = (Button) findViewById(R.id.btnPopLogin);
 
+        sharedPreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+
         btnPopLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,6 +81,49 @@ public class PopLogin extends Activity {
                             public void onResponse(JSONObject response) {
                                 // display response
                                 Log.d("Response", response.toString());
+                                //save info into share preference to later use
+                                boolean status = Boolean.parseBoolean(response.opt("status").toString());
+                                if(status){
+                                    String name;
+                                    String phone;
+                                    String email;
+                                    String day;
+                                    try {
+                                        JSONObject data = response.getJSONObject("data");
+                                        JSONObject user = data.getJSONObject("user");
+
+                                        name = user.getString("name");
+                                        phone = user.getString("phone");
+                                        email = user.getString("email");
+                                        day = user.getString("created_at");
+
+                                        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                                        String statusPass = Boolean.toString(status);
+
+                                        editor.putString(Name, name);
+                                        editor.putString(Phone, phone);
+                                        editor.putString(Email, email);
+                                        editor.putString(Status,statusPass);
+                                        editor.putString(CreatedDay,day);
+                                        editor.commit();
+
+//                                        Intent intent = new Intent(PopLogin.this,LoginResult.class);
+////                                        intent.putExtra(Name,name);
+////                                        intent.putExtra(Phone,phone);
+////                                        intent.putExtra(Email,email);
+////                                        intent.putExtra(CreatedDay,day);
+//                                        startActivity(intent);
+
+                                        Intent intent = new Intent(PopLogin.this, MainActivity.class);
+                                        startActivity(intent);
+
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+
+
+                                }
                             }
                         },
                         new Response.ErrorListener()

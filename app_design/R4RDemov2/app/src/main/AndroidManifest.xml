@@ -38,6 +38,8 @@
             </intent-filter>
         </activity>
 
+
+
         <activity android:name=".RoomDetail"
             android:label="RoomDetail"
             ></activity>
