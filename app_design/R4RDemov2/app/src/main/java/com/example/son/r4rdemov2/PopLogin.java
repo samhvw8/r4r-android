@@ -34,12 +34,13 @@ public class PopLogin extends Activity {
 
 
     private static final String LOGIN_REQUEST_URL = "http://52.36.12.106/api/v1/login";
-    public static final String MyPREFERENCES = "MyPrefs";
-    public static final String Name = "name";
-    public static final String Phone = "phone";
-    public static final String Email = "email";
-    public static final String Status = "status";
-    public static final String CreatedDay = "created_at";
+    private static final String MyPREFERENCES = "MyPrefs";
+    private static final String Name = "name";
+    private static final String Phone = "phone";
+    private static final String Email = "email";
+    private static final String Status = "status";
+    private static final String CreatedDay = "created_at";
+    private static final String Id = "id";
     SharedPreferences sharedPreferences;
 
     @Override
@@ -88,6 +89,7 @@ public class PopLogin extends Activity {
                                     String phone;
                                     String email;
                                     String day;
+                                    int id;
                                     try {
                                         JSONObject data = response.getJSONObject("data");
                                         JSONObject user = data.getJSONObject("user");
@@ -96,6 +98,7 @@ public class PopLogin extends Activity {
                                         phone = user.getString("phone");
                                         email = user.getString("email");
                                         day = user.getString("created_at");
+                                        id = Integer.parseInt(user.optString("id").toString());
 
                                         SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -106,14 +109,8 @@ public class PopLogin extends Activity {
                                         editor.putString(Email, email);
                                         editor.putString(Status,statusPass);
                                         editor.putString(CreatedDay,day);
+                                        editor.putInt(Id,id);
                                         editor.commit();
-
-//                                        Intent intent = new Intent(PopLogin.this,LoginResult.class);
-////                                        intent.putExtra(Name,name);
-////                                        intent.putExtra(Phone,phone);
-////                                        intent.putExtra(Email,email);
-////                                        intent.putExtra(CreatedDay,day);
-//                                        startActivity(intent);
 
                                         Intent intent = new Intent(PopLogin.this, MainActivity.class);
                                         startActivity(intent);
@@ -121,8 +118,6 @@ public class PopLogin extends Activity {
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
-
-
                                 }
                             }
                         },
@@ -133,8 +128,6 @@ public class PopLogin extends Activity {
                                 Log.d("Error.Response", error.toString());
                             }
                         }
-
-
                 ){
                     @Override
                     public Map<String, String> getHeaders() throws AuthFailureError {

@@ -24,6 +24,7 @@ import android.widget.TextView;
 import com.example.son.fragments.HomeFragment;
 import com.example.son.fragments.SearchFragment;
 import com.example.son.fragments.UserFragment;
+import com.example.son.r4rdemov2.AddRoom;
 import com.example.son.r4rdemov2.MainActivity;
 import com.example.son.r4rdemov2.R;
 
@@ -34,18 +35,19 @@ import com.example.son.r4rdemov2.R;
 // this class is only for check the result
 public class LoginResult extends Fragment {
 
-    public static final String MyPREFERENCES = "MyPrefs";
-    public static final String Name = "name";
-    public static final String Phone = "phone";
-    public static final String Email = "email";
-    public static final String Status = "status";
-    public static final String CreatedDay = "created_at";
+    private static final String MyPREFERENCES = "MyPrefs";
+    private static final String Name = "name";
+    private static final String Phone = "phone";
+    private static final String Email = "email";
+    private static final String Status = "status";
+    private static final String CreatedDay = "created_at";
 
     private TextView tvNameUser;
     private TextView tvEmailUser;
     private TextView tvPhoneUser;
     private TextView tvDayUser;
     private Button btnLogout;
+    private Button btnAddRoom;
     SharedPreferences sharedPreferences;
 
     @Nullable
@@ -57,6 +59,7 @@ public class LoginResult extends Fragment {
         tvPhoneUser = (TextView) rootView.findViewById(R.id.tvPhoneUser);
         tvDayUser = (TextView) rootView.findViewById(R.id.tvDayUser);
         btnLogout = (Button) rootView.findViewById(R.id.btnLogout);
+        btnAddRoom = (Button)rootView.findViewById(R.id.btnAddRoom);
 
 
         sharedPreferences = this.getActivity().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
@@ -81,6 +84,14 @@ public class LoginResult extends Fragment {
                 editor.commit();
 
                 Intent intent = new Intent(getActivity().getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        btnAddRoom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity().getApplicationContext(), AddRoom.class);
                 startActivity(intent);
             }
         });

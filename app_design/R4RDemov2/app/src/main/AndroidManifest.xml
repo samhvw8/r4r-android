@@ -48,6 +48,10 @@
             android:label="SearchResult"
             ></activity>
 
+        <activity android:name=".AddRoom"
+            android:label="AddRoom"
+            ></activity>
+
         <activity android:name=".PopLogin"
             android:theme="@style/AppTheme.CustomTheme">
 

@@ -50,19 +50,6 @@ import java.util.StringTokenizer;
 public class HomeFragment extends Fragment {
 
 
-    //    String[] countries = new String[]{
-//            "VietNam",
-//            "Singapore",
-//            "ThaiLand",
-//            "Malaysia",
-//            "Philippin",
-//            "Laos",
-//            "Cambodia",
-//            "Bruney",
-//            "Mianma",
-//            "Indonesia",
-//            "Timor_Lester"
-//    };
     ListView lvRoom;
     //Waiting Dialog
     ProgressDialog mProgressDialog;
@@ -87,8 +74,6 @@ public class HomeFragment extends Fragment {
                 .build();
         ImageLoader.getInstance().init(config); // Do it on Application start
         lvRoom = (ListView) rootView.findViewById(R.id.lvRoom);
-//        ArrayAdapter adapter = new ArrayAdapter(getActivity().getApplicationContext(),R.layout.mytextview,countries);
-//        lvRoom.setAdapter(adapter);
 
         //set all to address when click the item
         lvRoom.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -179,7 +164,7 @@ public class HomeFragment extends Fragment {
 //                inputStream.close();
 //                httpURLConnection.disconnect();
                 List<RoomModel> roomModelList = new ArrayList<>();
-
+                Log.d("Response", roomArray.toString());
                 for (int i = 0; i < roomArray.length(); i++) {
                     JSONObject finalObject = roomArray.getJSONObject(i);
                     RoomModel roomModel = new RoomModel();
@@ -199,8 +184,8 @@ public class HomeFragment extends Fragment {
 
                     //add kinh vi do
                     //getkinh do vi do version 2
-//                    roomModel.setLatitude(Double.parseDouble(finalObject.optString("latitude").toString()));
-//                    roomModel.setLongtitude(Double.parseDouble(finalObject.optString("longitude").toString()));
+                    roomModel.setLatitude(Double.parseDouble(finalObject.optString("latitude").toString()));
+                    roomModel.setLongtitude(Double.parseDouble(finalObject.optString("longitude").toString()));
 
                     // adding the final object in the list
                     roomModelList.add(roomModel);
@@ -232,9 +217,7 @@ public class HomeFragment extends Fragment {
             super.onPostExecute(result);
 
             RoomAdapter adapter = new RoomAdapter(getActivity().getApplicationContext(), R.layout.room_feed, result);
-//            if(adapter == null){
-//                Log.d(TAG, "onPostExecute: FAIL");
-//            }
+
             lvRoom.setAdapter(adapter);
             //close the loading dialog
             mProgressDialog.dismiss();

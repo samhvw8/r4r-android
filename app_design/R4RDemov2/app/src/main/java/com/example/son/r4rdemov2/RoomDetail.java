@@ -35,7 +35,6 @@ public class RoomDetail extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-//        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         GoogleMap googleMap;
         googleMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();

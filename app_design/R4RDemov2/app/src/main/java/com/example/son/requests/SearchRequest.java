@@ -20,9 +20,6 @@ public class SearchRequest extends StringRequest {
     public SearchRequest(String street,String district,String ward, String city,int minPrice, int maxPrice, double minArea, double maxArea, Response.Listener<String> listener){
         super(Method.POST,SEARCH_REQUEST_URL, listener, null);
         params = new HashMap<>();
-//        String creds = String.format("%s:%s","samhv.ict@gmail.com","w8c8aaff");
-//        String auth = "Basic " + Base64.encodeToString(creds.getBytes(), Base64.DEFAULT);
-//        params.put("Authorization", auth);
 
         params.put("minPrice",minPrice +"");
         params.put("maxPrice",maxPrice + "");

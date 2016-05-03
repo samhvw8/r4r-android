@@ -80,30 +80,17 @@ public class SearchResult extends AppCompatActivity {
 
                 //add kinh vi do
                 //append dia chi
-//                    String street = roomModel.getStreet();
-//                    String ward = roomModel.getWard();
-//                    String district = roomModel.getDistrict();
-//                    String city = roomModel.getCity();
-//                    String address = street + "-" + ward + "-" + district + "-" + city;
-//                    //add vao model
-//                    LatAndLng kinhvi = new LatAndLng(roomModel, address);
-//                    roomModel.setLongtitude(kinhvi.getLat());
-//                    roomModel.setLatitude(kinhvi.getLng());
                 //getkinh do vi do version 2
-//                roomModel.setLatitude(Double.parseDouble(finalObject.optString("latitude").toString()));
-//                roomModel.setLongtitude(Double.parseDouble(finalObject.optString("longitude").toString()));
+                roomModel.setLatitude(Double.parseDouble(finalObject.optString("latitude").toString()));
+                roomModel.setLongtitude(Double.parseDouble(finalObject.optString("longitude").toString()));
 
                 // adding the final object in the list
                 roomModelList.add(roomModel);
             }
 
             RoomAdapter adapter = new RoomAdapter(SearchResult.this, R.layout.room_feed, roomModelList);
-//            if(adapter == null){
-//                Log.d(TAG, "onPostExecute: FAIL");
-//            }
+
             lvRoom.setAdapter(adapter);
-
-
             lvRoom.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position,
@@ -119,8 +106,6 @@ public class SearchResult extends AppCompatActivity {
                     String area = "Area:\n " + Double.toString(room.getArea()) + "m2\n";
                     String description = "Description:\n" + room.getDescription() + "\n";
                     //get toa do vao activity RoomDetail
-//                String lat = Double.toString(room.getLatitude());
-//                String lng = Double.toString(room.getLongtitude());
                     double lat = room.getLatitude();
                     double lng = room.getLongtitude();
                     Intent intent = new Intent(SearchResult.this, RoomDetail.class);
