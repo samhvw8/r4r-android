@@ -10,8 +10,10 @@ import android.view.Window;
 import android.widget.TextView;
 
 import com.example.son.r4rdemov2.R;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -48,8 +50,13 @@ public class RoomDetail extends AppCompatActivity {
         lng = i.getDoubleExtra("lng",57);
         //make marker
         String address = i.getStringExtra("address");
+
         LatLng roomLocation = new LatLng(lat, lng);
         Marker TP = googleMap.addMarker(new MarkerOptions().position(roomLocation).title(address));
+//        googleMap.animateCamera( CameraUpdateFactory.zoomTo(3.0f) );
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(TP.getPosition(), 14));
+//        CameraPosition cameraPosition = new CameraPosition.Builder()
+//                .target(roomLocation).zoom(12).build();
 
         //show detail info
 

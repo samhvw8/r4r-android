@@ -86,7 +86,7 @@ public class HomeFragment extends Fragment {
                 String ward = room.getWard();
                 String district = room.getDistrict();
                 String city = room.getCity();
-                String address = "Address:\n" + street + "-" + ward + "-" + district + "-" + city + "\n";
+                String address = "Address: " + street + "-" + ward + "-" + district + "-" + city + "\n";
                 String price = "Price:\n" + Integer.toString(room.getPrice()) + "VND\n";
                 String area = "Area:\n " + Double.toString(room.getArea()) + "m2\n";
                 String description = "Description:\n" + room.getDescription() + "\n";

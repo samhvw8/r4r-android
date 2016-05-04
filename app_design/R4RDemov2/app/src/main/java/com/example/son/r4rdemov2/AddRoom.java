@@ -77,9 +77,9 @@ public class AddRoom extends AppCompatActivity {
                 description = etAddRoomDes.getText().toString();
                 price = Integer.parseInt(etAddPrice.getText().toString());
                 area = Double.parseDouble(etAddArea.getText().toString());
-                SharedPreferences sharedPreferences = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
-                String userId = sharedPreferences.getString(Id, null);
-                id = Integer.parseInt(userId);
+//                SharedPreferences sharedPreferences = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
+//                String userId = sharedPreferences.getString(Id, null);
+//                id = Integer.parseInt(userId);
 
                 Response.Listener<String> responseListener = new Response.Listener<String>() {
                     @Override
@@ -107,7 +107,7 @@ public class AddRoom extends AppCompatActivity {
                     }
                 };
 
-                AddRoomRequest addRoomRequest = new AddRoomRequest(id,city,ward,district,street,price,area,description,responseListener);
+                AddRoomRequest addRoomRequest = new AddRoomRequest(city,ward,district,street,price,area,description,responseListener);
                 RequestQueue queue = Volley.newRequestQueue(AddRoom.this);
                 queue.add(addRoomRequest);
             }
