@@ -19,6 +19,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.example.son.fragments.HomeFragment;
@@ -46,8 +48,9 @@ public class LoginResult extends Fragment {
     private TextView tvEmailUser;
     private TextView tvPhoneUser;
     private TextView tvDayUser;
-    private Button btnLogout;
+    private ImageButton btnLogout;
     private Button btnAddRoom;
+    private Button btnListAddRoom;
     SharedPreferences sharedPreferences;
 
     @Nullable
@@ -57,9 +60,10 @@ public class LoginResult extends Fragment {
         tvNameUser = (TextView) rootView.findViewById(R.id.tvNameUser);
         tvEmailUser = (TextView) rootView.findViewById(R.id.tvEmailUser);
         tvPhoneUser = (TextView) rootView.findViewById(R.id.tvPhoneUser);
-        tvDayUser = (TextView) rootView.findViewById(R.id.tvDayUser);
-        btnLogout = (Button) rootView.findViewById(R.id.btnLogout);
+        //tvDayUser = (TextView) rootView.findViewById(R.id.tvDayUser);
+        btnLogout = (ImageButton) rootView.findViewById(R.id.btnLogout);
         btnAddRoom = (Button)rootView.findViewById(R.id.btnAddRoom);
+        btnListAddRoom = (Button) rootView.findViewById(R.id.btnListAddRoom);
 
 
         sharedPreferences = this.getActivity().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
@@ -71,20 +75,37 @@ public class LoginResult extends Fragment {
         tvNameUser.setText(name);
         tvEmailUser.setText(email);
         tvPhoneUser.setText(phone);
-        tvDayUser.setText(day);
+       // tvDayUser.setText(day);
 
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferences myPrefs = getActivity().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+                //Creating the instance of PopupMenu
+                PopupMenu popup = new PopupMenu(getActivity().getApplicationContext(), btnLogout);
+                //Inflating the Popup using xml file
+                popup.getMenuInflater().inflate(R.menu.pop_menu, popup.getMenu());
 
-                SharedPreferences.Editor editor = myPrefs.edit();
-                editor.clear();
-                editor.putString(Status, "false");
-                editor.commit();
+                //registering popup with OnMenuItemClickListener
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    public boolean onMenuItemClick(MenuItem item) {
+                        int id = item.getItemId();
+                        if (id == R.id.action_logout) {
+                            SharedPreferences myPrefs = getActivity().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 
-                Intent intent = new Intent(getActivity().getApplicationContext(), MainActivity.class);
-                startActivity(intent);
+                            SharedPreferences.Editor editor = myPrefs.edit();
+                            editor.clear();
+                            editor.putString(Status, "false");
+                            editor.commit();
+
+                            Intent intent = new Intent(getActivity().getApplicationContext(), MainActivity.class);
+                            startActivity(intent);
+                        }
+                        return true;
+                    }
+                });
+
+                popup.show();
+
             }
         });
 

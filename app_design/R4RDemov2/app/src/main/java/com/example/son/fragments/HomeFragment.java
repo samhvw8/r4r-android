@@ -86,10 +86,10 @@ public class HomeFragment extends Fragment {
                 String ward = room.getWard();
                 String district = room.getDistrict();
                 String city = room.getCity();
-                String address = "Address: " + street + "-" + ward + "-" + district + "-" + city + "\n";
-                String price = "Price:\n" + Integer.toString(room.getPrice()) + "VND\n";
-                String area = "Area:\n " + Double.toString(room.getArea()) + "m2\n";
-                String description = "Description:\n" + room.getDescription() + "\n";
+                String address =   street + "-" + ward + "-" + district + "-" + city + "\n";
+                String price = Integer.toString(room.getPrice()) + "VND\n";
+                String area =  Double.toString(room.getArea()) + "m2\n";
+                String description =  room.getDescription() + "\n";
                 //get toa do vao activity RoomDetail
 //                String lat = Double.toString(room.getLatitude());
 //                String lng = Double.toString(room.getLongtitude());
@@ -168,7 +168,9 @@ public class HomeFragment extends Fragment {
                 for (int i = 0; i < roomArray.length(); i++) {
                     JSONObject finalObject = roomArray.getJSONObject(i);
                     RoomModel roomModel = new RoomModel();
-                    roomModel.setImage_album_url(finalObject.getString("image_album_url"));
+                    if(!finalObject.getString("image_album_url").equals("null"))
+                        roomModel.setImage_album_url(finalObject.getString("image_album_url"));
+
                     roomModel.setPrice(Integer.parseInt(finalObject.optString("price").toString()));
                     roomModel.setCity(finalObject.getString("city"));
                     roomModel.setDistrict(finalObject.getString("district"));
@@ -184,7 +186,9 @@ public class HomeFragment extends Fragment {
 
                     //add kinh vi do
                     //getkinh do vi do version 2
+                    if(!finalObject.optString("latitude").toString().equals("null"))
                     roomModel.setLatitude(Double.parseDouble(finalObject.optString("latitude").toString()));
+                    if(!finalObject.optString("longitude").toString().equals("null"))
                     roomModel.setLongtitude(Double.parseDouble(finalObject.optString("longitude").toString()));
 
                     // adding the final object in the list

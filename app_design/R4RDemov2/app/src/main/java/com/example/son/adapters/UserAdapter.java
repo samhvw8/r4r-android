@@ -51,7 +51,7 @@ public class UserAdapter extends ArrayAdapter {
         tvNameUser = (TextView) convertView.findViewById(R.id.tvNameUser);
         tvPhoneUser = (TextView) convertView.findViewById(R.id.tvPhoneUser);
         tvEmailUser = (TextView) convertView.findViewById(R.id.tvEmailUser);
-        tvDayUser = (TextView) convertView.findViewById(R.id.tvDayUser);
+        //tvDayUser = (TextView) convertView.findViewById(R.id.tvDayUser);
 
         //ImageLoader.getInstance().displayImage(roomAdapterList.get(position).getImage_album_url(), imgRoom);
         // Default options will be used
@@ -59,7 +59,7 @@ public class UserAdapter extends ArrayAdapter {
         name = userAdapter.get(position).getName();
         email = userAdapter.get(position).getEmail();
         phone = userAdapter.get(position).getPhone();
-        tvDayUser.setText("Create Day: "+ userAdapter.get(position).getCreatedDay());
+        //tvDayUser.setText("Create Day: "+ userAdapter.get(position).getCreatedDay());
 
         tvNameUser.setText(name);
         tvPhoneUser.setText(phone);

@@ -101,10 +101,10 @@ public class SearchResult extends AppCompatActivity {
                     String ward = room.getWard();
                     String district = room.getDistrict();
                     String city = room.getCity();
-                    String address = "Address:\n" + street + "-" + ward + "-" + district + "-" + city + "\n";
-                    String price = "Price:\n" + Integer.toString(room.getPrice()) + "VND\n";
-                    String area = "Area:\n " + Double.toString(room.getArea()) + "m2\n";
-                    String description = "Description:\n" + room.getDescription() + "\n";
+                    String address =   street + "-" + ward + "-" + district + "-" + city + "\n";
+                    String price =  Integer.toString(room.getPrice()) + "VND\n";
+                    String area =  Double.toString(room.getArea()) + "m2\n";
+                    String description =  room.getDescription() + "\n";
                     //get toa do vao activity RoomDetail
                     double lat = room.getLatitude();
                     double lng = room.getLongtitude();

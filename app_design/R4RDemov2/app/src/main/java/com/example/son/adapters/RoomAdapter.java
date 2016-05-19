@@ -31,10 +31,10 @@ public class RoomAdapter extends ArrayAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        if (convertView == null){
+        if (convertView == null) {
             LayoutInflater vi;
             vi = LayoutInflater.from(getContext());
-            convertView = vi.inflate(R.layout.room_feed,null);
+            convertView = vi.inflate(R.layout.room_feed, null);
         }
 
         ImageView imgRoom;
@@ -42,14 +42,17 @@ public class RoomAdapter extends ArrayAdapter {
         String tvWard;
         String tvDistrict;
         String tvCity;
+        String description;
+        //TextView tvDescriptionRoom;
         TextView tvPrice;
         TextView Address;
-        TextView tvDay;
+        TextView tvTimestamp;
 
         imgRoom = (ImageView) convertView.findViewById(R.id.imgRoom);
         Address = (TextView) convertView.findViewById(R.id.tvAddress);
         tvPrice = (TextView) convertView.findViewById(R.id.tvPrice);
-        tvDay = (TextView) convertView.findViewById(R.id.tvDay);
+       tvTimestamp = (TextView) convertView.findViewById(R.id.tvTimestamp);
+        //tvDescriptionRoom = (TextView) convertView.findViewById(R.id.tvDescriptionRoom);
 
         ImageLoader.getInstance().displayImage(roomAdapterList.get(position).getImage_album_url(), imgRoom); // Default options will be used
 
@@ -57,9 +60,11 @@ public class RoomAdapter extends ArrayAdapter {
         tvCity = roomAdapterList.get(position).getCity();
         tvDistrict = roomAdapterList.get(position).getDistrict();
         tvWard = roomAdapterList.get(position).getWard();
-        tvDay.setText("Create Day: "+ roomAdapterList.get(position).getCreated_day());
-        tvPrice.setText(Integer.toString(roomAdapterList.get(position).getPrice()) + "VND");
-        Address.setText(tvStreet + "\n" + tvWard + "\n" + tvDistrict + "\n" + tvCity);
+        tvTimestamp.setText( roomAdapterList.get(position).getCreated_day());
+        tvPrice.setText("Price: " + Integer.toString(roomAdapterList.get(position).getPrice()) + "VND");
+        Address.setText("Address:\n" + tvStreet + "-" + tvWard + "-" + tvDistrict + "-" + tvCity);
+//        description = roomAdapterList.get(position).getDescription();
+//        tvDescriptionRoom.setText(description);
         return convertView;
     }
 }

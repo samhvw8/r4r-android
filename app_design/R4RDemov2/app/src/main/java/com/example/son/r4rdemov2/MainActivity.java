@@ -93,6 +93,10 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.action_settings) {
             return true;
         }
+        if(id == R.id.action_search){
+            FragmentManager fm = getFragmentManager();
+            fm.beginTransaction().replace(R.id.content_frame, new SearchFragment()).commit();
+        }
 
         return super.onOptionsItemSelected(item);
     }
