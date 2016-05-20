@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.R4RSS.GlobalValues;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
@@ -33,17 +34,11 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback{
 
     SupportMapFragment supportMapFragment;
-    public static final String MyPREFERENCES = "MyPrefs";
-    public static final String Name = "name";
-    public static final String Phone = "phone";
-    public static final String Email = "email";
-    public static final String Status = "status";
-    public static final String CreatedDay = "created_at";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        GlobalValues.init(this.getApplicationContext());
         //map
         supportMapFragment = SupportMapFragment.newInstance();
         //map
@@ -112,11 +107,8 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-
         FragmentManager fm = getFragmentManager();
-        SharedPreferences sharedPreferences = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
-        String statusRef = sharedPreferences.getString(Status, null);
-        boolean status = Boolean.parseBoolean(statusRef);
+        boolean status = Boolean.parseBoolean(GlobalValues.getStatus());
 
         int id = item.getItemId();
 

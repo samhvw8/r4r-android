@@ -23,6 +23,8 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.R4RSS.GlobalValues;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,17 +32,6 @@ import java.util.Map;
  * Created by Son on 4/21/2016.
  */
 public class PopLogin extends Activity {
-
-
-    private static final String LOGIN_REQUEST_URL = "http://52.36.12.106/api/v1/login";
-    private static final String MyPREFERENCES = "MyPrefs";
-    private static final String Name = "name";
-    private static final String Phone = "phone";
-    private static final String Email = "email";
-    private static final String Status = "status";
-    private static final String CreatedDay = "created_at";
-    private static final String Id = "id";
-    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +45,7 @@ public class PopLogin extends Activity {
         int width = dm.widthPixels;
         int height = dm.heightPixels;
 
-        getWindow().setLayout((int) (width*.6),(int) (height*.4));
+        getWindow().setLayout((int) (width * .6), (int) (height * .4));
 
         //consider input vaule to login
 
@@ -62,54 +53,41 @@ public class PopLogin extends Activity {
         final EditText etPassword = (EditText) findViewById(R.id.etPassword);
         final Button btnPopLogin = (Button) findViewById(R.id.btnPopLogin);
 
-        sharedPreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-
         btnPopLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String username = etUserName.getText().toString();
+                final String email = etUserName.getText().toString();
                 final String password = etPassword.getText().toString();
-                final String base64Source = username + ":" + password;
+                final String base64Source = email + ":" + password;
                 final String base64String = "Basic " + Base64.encodeToString(base64Source.getBytes(), Base64.DEFAULT);
 
 
                 RequestQueue queue = Volley.newRequestQueue(PopLogin.this);
-                JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, LOGIN_REQUEST_URL, null,
-                        new Response.Listener<JSONObject>()
-                        {
+                JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, GlobalValues.LOGIN_REQUEST_URL, null,
+                        new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
                                 // display response
                                 Log.d("Response", response.toString());
                                 //save info into share preference to later use
                                 boolean status = Boolean.parseBoolean(response.opt("status").toString());
-                                if(status){
-                                    String name;
-                                    String phone;
-                                    String email;
+                                if (status) {
+
                                     String day;
                                     int id;
                                     try {
                                         JSONObject data = response.getJSONObject("data");
                                         JSONObject user = data.getJSONObject("user");
 
-                                        name = user.getString("name");
-                                        phone = user.getString("phone");
-                                        email = user.getString("email");
+                                        String name = user.getString("name");
+                                        String phone = user.getString("phone");
                                         day = user.getString("created_at");
                                         id = Integer.parseInt(user.optString("id").toString());
 
-                                        SharedPreferences.Editor editor = sharedPreferences.edit();
 
                                         String statusPass = Boolean.toString(status);
 
-                                        editor.putString(Name, name);
-                                        editor.putString(Phone, phone);
-                                        editor.putString(Email, email);
-                                        editor.putString(Status,statusPass);
-                                        editor.putString(CreatedDay,day);
-                                        editor.putInt(Id,id);
-                                        editor.commit();
+                                        GlobalValues.login(base64String, name, phone, email, statusPass, day, id);
 
                                         Intent intent = new Intent(PopLogin.this, MainActivity.class);
                                         startActivity(intent);
@@ -120,14 +98,13 @@ public class PopLogin extends Activity {
                                 }
                             }
                         },
-                        new Response.ErrorListener()
-                        {
+                        new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {
                                 Log.d("Error.Response", error.toString());
                             }
                         }
-                ){
+                ) {
                     @Override
                     public Map<String, String> getHeaders() throws AuthFailureError {
                         HashMap<String, String> headers = new HashMap<String, String>();

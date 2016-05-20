@@ -6,11 +6,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.R4RSS.GlobalValues;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
@@ -19,12 +21,11 @@ import com.R4RSS.requests.RegisterRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-/**
- * Created by Son on 4/21/2016.
- */
+import butterknife.Bind;
+
+
 public class PopRegister extends Activity {
 
-    private static final String MyPREFERENCES = "MyPrefs";
     private static final String Name = "name";
     private static final String Phone = "phone";
     private static final String Email = "email";
@@ -32,14 +33,12 @@ public class PopRegister extends Activity {
     private static final String CreatedDay = "created_at";
     private static final String Id = "id";
 
-    SharedPreferences sharedPreferences;
 
     EditText etResUsername;
     EditText etResPassword;
     EditText etResEmail;
     EditText etResPhone;
     Button btnResRegister;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +58,6 @@ public class PopRegister extends Activity {
         etResPhone = (EditText) findViewById(R.id.etResPhone);
         btnResRegister = (Button) findViewById(R.id.btnResRegister);
 
-        sharedPreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 
         btnResRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,38 +78,27 @@ public class PopRegister extends Activity {
                             JSONObject jsonResponse = new JSONObject(response);
                             boolean status = Boolean.parseBoolean(jsonResponse.opt("status").toString());
 
-                            if (status){
-                                String name;
-                                String phone;
-                                String email;
-                                String day;
+                            if (status) {
+
                                 int id;
                                 JSONObject data = jsonResponse.getJSONObject("data");
                                 JSONObject user = data.getJSONObject("user");
 
-                                name = user.getString("name");
-                                phone = user.getString("phone");
-                                email = user.getString("email");
-                                day = user.getString("created_at");
+
+                                String day = user.getString("created_at");
                                 id = Integer.parseInt(user.optString("id").toString());
 
-                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                final String base64Source = email + ":" + password;
+                                final String base64String = "Basic " + Base64.encodeToString(base64Source.getBytes(), Base64.DEFAULT);
                                 String statusPass = Boolean.toString(status);
-                                editor.putString(Name, name);
-                                editor.putString(Phone, phone);
-                                editor.putString(Email, email);
-                                editor.putString(Status, statusPass);
-                                editor.putString(CreatedDay, day);
-                                editor.putInt(Id,id);
-                                editor.commit();
+                                GlobalValues.login(base64String, name, phone, email, statusPass, day, id);
 
                                 Intent intent = new Intent(PopRegister.this, MainActivity.class);
                                 startActivity(intent);
-                            }
-                            else {
+                            } else {
                                 AlertDialog.Builder builder = new AlertDialog.Builder(PopRegister.this);
                                 builder.setMessage("Search Failed")
-                                        .setNegativeButton("Retry",null)
+                                        .setNegativeButton("Retry", null)
                                         .create()
                                         .show();
                             }

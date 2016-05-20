@@ -37,7 +37,7 @@
                 android:layout_width="@dimen/user_profile_pic"
                 android:layout_height="@dimen/user_profile_pic"
                 android:id="@+id/imgUser"
-                android:src="@drawable/tung"
+                android:src="@drawable/logo"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true" />
 
