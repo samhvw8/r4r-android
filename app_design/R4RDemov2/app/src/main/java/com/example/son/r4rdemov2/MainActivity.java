@@ -1,5 +1,6 @@
 package com.example.son.r4rdemov2;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -13,13 +14,21 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.Volley;
 import com.example.son.fragments.HomeFragment;
 import com.example.son.fragments.LoginResult;
 import com.example.son.fragments.SearchFragment;
 import com.example.son.fragments.UserFragment;
+import com.example.son.requests.SearchInMapRequest;
+import com.example.son.requests.SearchRequest;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback{
@@ -122,7 +131,40 @@ public class MainActivity extends AppCompatActivity
             }
 
         } else if (id == R.id.nav_search) {
-            fm.beginTransaction().replace(R.id.content_frame, new SearchFragment()).commit();
+
+            String city = "Hanoi";
+
+            Response.Listener<String> responseListener = new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    try {
+                        String result = response;
+                        JSONObject jsonResponse = new JSONObject(response);
+                        boolean status = Boolean.parseBoolean(jsonResponse.opt("status").toString());
+
+                        if (status){
+                            Intent intent = new Intent(MainActivity.this,FindInMap.class);
+                            intent.putExtra("response", result);
+                            startActivity(intent);
+                        }
+                        else {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                            builder.setMessage("Search Failed")
+                                    .setNegativeButton("Retry",null)
+                                    .create()
+                                    .show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
+
+
+            SearchInMapRequest searchRequest = new SearchInMapRequest(city,responseListener);
+            RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
+            queue.add(searchRequest);
+
         }
 
 //        } else if (id == R.id.nav_manage) {

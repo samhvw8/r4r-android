@@ -44,6 +44,10 @@
             android:label="RoomDetail"
             ></activity>
 
+        <activity android:name=".FindInMap"
+            android:label="FindInMap"
+            ></activity>
+
         <activity android:name=".SearchResult"
             android:label="SearchResult"
             ></activity>
