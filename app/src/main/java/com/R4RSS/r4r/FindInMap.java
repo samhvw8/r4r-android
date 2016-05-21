@@ -1,16 +1,42 @@
 package com.R4RSS.r4r;
 
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
+import com.R4RSS.GlobalValues;
 import com.R4RSS.models.RoomModel;
+import com.R4RSS.requests.FindInMapRequest;
+import com.R4RSS.requests.RegisterRequest;
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.Projection;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -19,8 +45,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 /**
@@ -28,8 +58,13 @@ import java.util.StringTokenizer;
  */
 public class FindInMap extends AppCompatActivity {
 
-    private GoogleMap googleMap;
-    List<RoomModel> roomModelList = new ArrayList<>();
+    int flag = 0;
+    EditText etRadius;
+    double radius;
+    Button btnFindInMap;
+    LatLng[] latLng = new LatLng[1];
+    GoogleMap googleMap;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,89 +73,142 @@ public class FindInMap extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        Intent intent = getIntent();
 
-        String response = intent.getStringExtra("response");
-        JSONObject parentObject = null;
-        try {
-            parentObject = new JSONObject(response);
-            JSONObject dataObject = parentObject.getJSONObject("data");
-            JSONArray roomArray = dataObject.getJSONArray("room");
+        etRadius = (EditText) findViewById(R.id.etRadius);
+        btnFindInMap = (Button) findViewById(R.id.btnFindInMap);
 
 
+        googleMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.findInMap)).getMap();
+        googleMap.getUiSettings().setZoomGesturesEnabled(true);
 
-            for (int i = 0; i < roomArray.length(); i++) {
-                JSONObject finalObject = roomArray.getJSONObject(i);
-                RoomModel roomModel = new RoomModel();
-                roomModel.setImage_album_url(finalObject.getString("image_album_url"));
-                roomModel.setPrice(Integer.parseInt(finalObject.optString("price").toString()));
-                roomModel.setCity(finalObject.getString("city"));
-                roomModel.setDistrict(finalObject.getString("district"));
-                roomModel.setWard(finalObject.getString("ward"));
-                roomModel.setStreet(finalObject.getString("street"));
-                roomModel.setDescription(finalObject.getString("decripstion"));
-                roomModel.setArea(Double.parseDouble(finalObject.optString("area").toString()));
-                //get create day
-                String createDay = finalObject.getString("created_at");
-                StringTokenizer tokenDay = new StringTokenizer(createDay, " ");
-                roomModel.setCreated_day(tokenDay.nextToken().toString());
-
-
-                //add kinh vi do
-                //append dia chi
-                //getkinh do vi do version 2
-                roomModel.setLatitude(Double.parseDouble(finalObject.optString("latitude").toString()));
-                roomModel.setLongtitude(Double.parseDouble(finalObject.optString("longitude").toString()));
-
-                // adding the final object in the list
-                roomModelList.add(roomModel);
-            }
-            initilizeMap(roomModelList);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
-
-
-    private void initilizeMap(List<RoomModel> roomModelList) {
-
-
-        if (googleMap == null) {
-            googleMap = ((MapFragment) getFragmentManager().findFragmentById(
-                    R.id.findInMap)).getMap();
-
-            // check if map is created successfully or not
-            if (googleMap == null) {
-                Toast.makeText(getApplicationContext(),
-                        "Sorry! unable to create maps", Toast.LENGTH_SHORT)
-                        .show();
-            }
-        }
-        for(RoomModel room : roomModelList) {
-            double lat;
-            double lng;
-
-            lat = room.getLatitude();
-            lng = room.getLongtitude();
-
-            LatLng roomLocation = new LatLng(lat, lng);
-            Marker TP = googleMap.addMarker(new MarkerOptions().position(roomLocation));
-        }
         CameraPosition cameraPosition = new CameraPosition.Builder().target(
-                new LatLng(21.0278, 105.8342)).zoom(12).build();
+                new LatLng(21.0278, 105.8342)).zoom(13).build();
 
         googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+        latLng[0] = new LatLng(21.0278, 105.8342);
+
+
+
+//        radius = Double.parseDouble(etRadius.getText().toString());
+        googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng point) {
+                flag = 1;
+                googleMap.clear();
+                //tao marker cho diem dc click
+                googleMap.addMarker(new MarkerOptions().position(point));
+
+                latLng[0] = new LatLng(point.latitude, point.longitude);
+            }
+        });
+
+
+        btnFindInMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                double radius = Double.parseDouble(etRadius.getText().toString());
+
+
+                double latitude = latLng[0].latitude;
+                double longitude = latLng[0].longitude;
+
+                googleMap.clear();
+                googleMap.addMarker(new MarkerOptions().position(latLng[0]));
+                Circle circle = googleMap.addCircle(new CircleOptions()
+                        .center(new LatLng(latitude, longitude))
+                        .radius(radius*1000)
+                        .strokeColor(Color.RED)
+                        .strokeWidth(2)
+                        .fillColor(Color.TRANSPARENT));
+
+
+                Response.Listener<String> responseListener = new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            Log.d("response 2: ", response);
+                            JSONObject jsonResponse = new JSONObject(response);
+                            boolean status = Boolean.parseBoolean(jsonResponse.opt("status").toString());
+
+                            if (status) {
+                                JSONObject dataObject = jsonResponse.getJSONObject("data");
+                                JSONArray roomArray = dataObject.getJSONArray("room");
+
+                                for (int i = 0; i < roomArray.length(); i++) {
+                                    JSONObject finalObject = roomArray.getJSONObject(i);
+                                    RoomModel roomModel = new RoomModel();
+
+                                    roomModel.setLatitude(Double.parseDouble(finalObject.optString("latitude").toString()));
+                                    roomModel.setLongtitude(Double.parseDouble(finalObject.optString("longitude").toString()));
+
+                                    double lat;
+                                    double lng;
+
+                                    lat = roomModel.getLatitude();
+                                    lng = roomModel.getLongtitude();
+
+                                    LatLng roomLocation = new LatLng(lat, lng);
+                                    Marker TP = googleMap.addMarker(new MarkerOptions().position(roomLocation));
+
+                            }
+
+
+
+
+                            } else {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(FindInMap.this);
+                                builder.setMessage("Search Failed")
+                                        .setNegativeButton("Retry", null)
+                                        .create()
+                                        .show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                };
+
+
+                FindInMapRequest findInMapRequest = new FindInMapRequest(latitude, longitude, radius, responseListener);
+                RequestQueue queue = Volley.newRequestQueue(FindInMap.this);
+                queue.add(findInMapRequest);
+
+            }
+        });
+
+
     }
+
+
+    public LatLng getLatLng(final GoogleMap googleMap) {
+        final LatLng[] latLng = new LatLng[1];
+        //latLng[0] = new LatLng(21.0278,105.8342);
+        if (googleMap != null) {
+            googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                @Override
+                public void onMapClick(LatLng point) {
+                    googleMap.clear();
+                    //tao marker cho diem dc click
+                    googleMap.addMarker(new MarkerOptions().position(point));
+                    //lay toa do diem dc click
+
+                    latLng[0] = new LatLng(point.latitude, point.longitude);
+                }
+            });
+
+            return latLng[0];
+        }
+
+        return null;
+    }
+
 
     @Override
     public void onResume() {
         super.onResume();
-        initilizeMap(roomModelList);
+//        initilizeMap();
     }
 
     @Override

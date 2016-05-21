@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 
 import com.R4RSS.GlobalValues;
 import com.android.volley.RequestQueue;
@@ -31,7 +32,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback{
+        implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
 
     SupportMapFragment supportMapFragment;
 
@@ -57,13 +58,13 @@ public class MainActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
+
         //show navigation drawer
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         FragmentManager fm = getFragmentManager();
-        fm.beginTransaction().replace(R.id.content_frame,new HomeFragment()).commit();
-
+        fm.beginTransaction().replace(R.id.content_frame, new HomeFragment()).commit();
 
 
     }
@@ -96,7 +97,7 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.action_settings) {
             return true;
         }
-        if(id == R.id.action_search){
+        if (id == R.id.action_search) {
             FragmentManager fm = getFragmentManager();
             fm.beginTransaction().replace(R.id.content_frame, new SearchFragment()).commit();
         }
@@ -113,48 +114,18 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-            fm.beginTransaction().replace(R.id.content_frame,new HomeFragment()).commit();
+            fm.beginTransaction().replace(R.id.content_frame, new HomeFragment()).commit();
         } else if (id == R.id.nav_user) {
-            if(status){
+            if (status) {
                 fm.beginTransaction().replace(R.id.content_frame, new LoginResult()).commit();
-            }else {
-                fm.beginTransaction().replace(R.id.content_frame,new UserFragment()).commit();
+            } else {
+                fm.beginTransaction().replace(R.id.content_frame, new UserFragment()).commit();
             }
 
         } else if (id == R.id.nav_search) {
+            Intent intent = new Intent(MainActivity.this, FindInMap.class);
+            startActivity(intent);
 
-            String city = "Hanoi";
-
-            Response.Listener<String> responseListener = new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    try {
-                        String result = response;
-                        JSONObject jsonResponse = new JSONObject(response);
-                        boolean status = Boolean.parseBoolean(jsonResponse.opt("status").toString());
-
-                        if (status){
-                            Intent intent = new Intent(MainActivity.this,FindInMap.class);
-                            intent.putExtra("response", result);
-                            startActivity(intent);
-                        }
-                        else {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                            builder.setMessage("Search Failed")
-                                    .setNegativeButton("Retry",null)
-                                    .create()
-                                    .show();
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            };
-
-
-            SearchInMapRequest searchRequest = new SearchInMapRequest(city,responseListener);
-            RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
-            queue.add(searchRequest);
 
         }
 

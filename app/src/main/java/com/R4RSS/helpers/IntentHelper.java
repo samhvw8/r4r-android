@@ -14,6 +14,7 @@ public class IntentHelper {
   public static void chooseFileIntent(Activity activity){
     Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
     intent.setType("image/*");
+//    chooseFile = Intent.createChooser(chooseFile, "Choose a file");
     activity.startActivityForResult(intent, FILE_PICK);
   }
 }

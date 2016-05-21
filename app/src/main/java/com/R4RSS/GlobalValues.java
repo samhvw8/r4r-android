@@ -16,7 +16,7 @@ public class GlobalValues {
       More here: https://api.imgur.com/
      */
     public static final String MY_IMGUR_CLIENT_ID = "7a36a635dea83be";
-    public static final String MY_IMGUR_CLIENT_SECRET = "842fe0b03ac87c02dbcba94155bb17747fa3fdbd";
+    public static final String MY_IMGUR_CLIENT_SECRET = "dc87beadd4f8497a1e201ee03798298c8d4b5ce9";
 
     /*
       Client Auth
@@ -27,6 +27,7 @@ public class GlobalValues {
 
     public static final String LOGIN_REQUEST_URL = "http://52.36.12.106/api/v1/login";
     public static final String ADD_ROOM_REQUEST_URL = "http://52.36.12.106/api/v1/room";
+    public static final String FIND_IN_MAP_URL = "";
 
 
     public static SharedPreferences sharedPreferences;

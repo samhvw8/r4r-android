@@ -20,6 +20,8 @@ import java.lang.ref.WeakReference;
 public class NotificationHelper {
     public final static String TAG = NotificationHelper.class.getSimpleName();
 
+    public static String imgUrl;
+
     private WeakReference<Context> mContext;
 
 
@@ -50,6 +52,8 @@ public class NotificationHelper {
         mBuilder.setContentTitle(mContext.get().getString(R.string.notifaction_success));
 
         mBuilder.setContentText(response.data.link);
+
+        imgUrl = response.data.link;
 
         mBuilder.setColor(mContext.get().getResources().getColor(R.color.primary));
 

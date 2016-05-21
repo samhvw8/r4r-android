@@ -16,7 +16,7 @@ public class AddRoomRequest extends StringRequest {
 
     private Map<String, String> params;
 
-    public AddRoomRequest(String city, String ward, String district, String street, int price, double area, String description, Response.Listener<String> listener) {
+    public AddRoomRequest(String city, String ward, String district, String street, int price, double area, String description,String imgUrl, Response.Listener<String> listener) {
         super(Method.POST, GlobalValues.ADD_ROOM_REQUEST_URL, listener, null);
 
         params = new HashMap<>();
@@ -29,6 +29,10 @@ public class AddRoomRequest extends StringRequest {
         params.put("price", price + "");
         params.put("area", area + "");
         params.put("description", description);
+        params.put("image_album_url",imgUrl);
+
+
+
     }
 
     @Override

@@ -3,6 +3,25 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/etRadius"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:hint="radius"/>
+
+        <Button
+            android:id="@+id/btnFindInMap"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Search"/>
+
+    </LinearLayout>
+
     <fragment
         android:id="@+id/findInMap"
         android:name="com.google.android.gms.maps.MapFragment"

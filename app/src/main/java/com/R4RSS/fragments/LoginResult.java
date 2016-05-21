@@ -16,7 +16,9 @@ import android.widget.TextView;
 
 import com.R4RSS.GlobalValues;
 import com.R4RSS.r4r.AddRoom;
+import com.R4RSS.r4r.MainActivity;
 import com.R4RSS.r4r.R;
+
 import butterknife.Bind;
 
 /**
@@ -69,6 +71,11 @@ public class LoginResult extends Fragment {
                         int id = item.getItemId();
                         if (id == R.id.action_logout) {
                             GlobalValues.logout();
+
+                            // Go Back MainActivity
+                            Intent intent = new Intent(getActivity().getApplicationContext(), MainActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
                         }
                         return true;
                     }

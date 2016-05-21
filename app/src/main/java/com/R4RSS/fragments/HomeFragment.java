@@ -6,12 +6,16 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
+import com.R4RSS.GlobalValues;
+import com.R4RSS.r4r.AddRoom;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -36,6 +40,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import butterknife.OnClick;
+
 /**
  * Created by Son on 4/11/2016.
  */
@@ -49,7 +55,7 @@ public class HomeFragment extends Fragment {
     private int limit = 7;
 
 
-    private static final String URL_SELECT = "http://52.36.12.106//api/v1/rooms";
+    private static final String URL_SELECT = "http://52.36.12.106/api/v1/rooms";
 
 
     @Nullable
@@ -67,6 +73,30 @@ public class HomeFragment extends Fragment {
         ImageLoader.getInstance().init(config); // Do it on Application start
         lvRoom = (ListView) rootView.findViewById(R.id.lvRoom);
 
+        // fab
+        FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
+
+
+
+        boolean status = Boolean.parseBoolean(GlobalValues.getStatus());
+
+        if(status) {
+            fab.setVisibility(View.VISIBLE);
+        } else {
+            fab.setVisibility(View.INVISIBLE);
+        }
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity().getApplicationContext(), AddRoom.class);
+                startActivity(intent);
+            }
+        });
+
+
+
+
         //set all to address when click the item
         lvRoom.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -78,27 +108,32 @@ public class HomeFragment extends Fragment {
                 String ward = room.getWard();
                 String district = room.getDistrict();
                 String city = room.getCity();
-                String address =   street + "-" + ward + "-" + district + "-" + city + "\n";
+                String address = street + "-" + ward + "-" + district + "-" + city + "\n";
                 String price = Integer.toString(room.getPrice()) + "VND\n";
-                String area =  Double.toString(room.getArea()) + "m2\n";
-                String description =  room.getDescription() + "\n";
+                String area = Double.toString(room.getArea()) + "m2\n";
+                String description = room.getDescription() + "\n";
                 //get toa do vao activity RoomDetail
 //                String lat = Double.toString(room.getLatitude());
 //                String lng = Double.toString(room.getLongtitude());
                 double lat = room.getLatitude();
-                double lng  = room.getLongtitude();
+                double lng = room.getLongtitude();
                 Intent intent = new Intent(getActivity().getApplicationContext(), RoomDetail.class);
                 intent.putExtra("price", price);
                 intent.putExtra("address", address);
                 intent.putExtra("area", area);
                 intent.putExtra("description", description);
-                intent.putExtra("lat",lat);
+                intent.putExtra("lat", lat);
                 intent.putExtra("lng", lng);
                 startActivity(intent);
             }
         });
         return rootView;
     }
+
+
+
+
+
 
     @Override
     public void onResume() {
@@ -160,7 +195,7 @@ public class HomeFragment extends Fragment {
                 for (int i = 0; i < roomArray.length(); i++) {
                     JSONObject finalObject = roomArray.getJSONObject(i);
                     RoomModel roomModel = new RoomModel();
-                    if(!finalObject.getString("image_album_url").equals("null"))
+                    if (!finalObject.getString("image_album_url").equals("null"))
                         roomModel.setImage_album_url(finalObject.getString("image_album_url"));
 
                     roomModel.setPrice(Integer.parseInt(finalObject.optString("price").toString()));
@@ -168,20 +203,20 @@ public class HomeFragment extends Fragment {
                     roomModel.setDistrict(finalObject.getString("district"));
                     roomModel.setWard(finalObject.getString("ward"));
                     roomModel.setStreet(finalObject.getString("street"));
-                    roomModel.setDescription(finalObject.getString("decripstion"));
+                    roomModel.setDescription(finalObject.getString("description"));
                     roomModel.setArea(Double.parseDouble(finalObject.optString("area").toString()));
                     //get create day
                     String createDay = finalObject.getString("created_at");
-                    StringTokenizer tokenDay = new StringTokenizer( createDay , " " );
+                    StringTokenizer tokenDay = new StringTokenizer(createDay, " ");
                     roomModel.setCreated_day(tokenDay.nextToken().toString());
 
 
                     //add kinh vi do
                     //getkinh do vi do version 2
-                    if(!finalObject.optString("latitude").toString().equals("null"))
-                    roomModel.setLatitude(Double.parseDouble(finalObject.optString("latitude").toString()));
-                    if(!finalObject.optString("longitude").toString().equals("null"))
-                    roomModel.setLongtitude(Double.parseDouble(finalObject.optString("longitude").toString()));
+                    if (!finalObject.optString("latitude").toString().equals("null"))
+                        roomModel.setLatitude(Double.parseDouble(finalObject.optString("latitude").toString()));
+                    if (!finalObject.optString("longitude").toString().equals("null"))
+                        roomModel.setLongtitude(Double.parseDouble(finalObject.optString("longitude").toString()));
 
                     // adding the final object in the list
                     roomModelList.add(roomModel);

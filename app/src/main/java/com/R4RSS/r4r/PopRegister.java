@@ -21,7 +21,7 @@ import com.R4RSS.requests.RegisterRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import butterknife.Bind;
+//import butterknife.Bind;
 
 
 public class PopRegister extends Activity {
