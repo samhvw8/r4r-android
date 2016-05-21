@@ -58,6 +58,9 @@ public class GlobalValues {
         editor.putInt("id", id);
         editor.commit();
     }
+    public static Context getContex(){
+        return preCon;
+    }
 
     public static String getName() {
         sharedPreferences = preCon.getSharedPreferences("r4r", Context.MODE_PRIVATE);

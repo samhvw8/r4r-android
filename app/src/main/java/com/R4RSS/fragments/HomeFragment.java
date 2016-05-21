@@ -77,10 +77,9 @@ public class HomeFragment extends Fragment {
         FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
 
 
-
         boolean status = Boolean.parseBoolean(GlobalValues.getStatus());
 
-        if(status) {
+        if (status) {
             fab.setVisibility(View.VISIBLE);
         } else {
             fab.setVisibility(View.INVISIBLE);
@@ -93,8 +92,6 @@ public class HomeFragment extends Fragment {
                 startActivity(intent);
             }
         });
-
-
 
 
         //set all to address when click the item
@@ -131,10 +128,6 @@ public class HomeFragment extends Fragment {
     }
 
 
-
-
-
-
     @Override
     public void onResume() {
         super.onResume();
@@ -167,9 +160,6 @@ public class HomeFragment extends Fragment {
             try {
                 URL url = new URL(URL_SELECT);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-//                String newUser = "samhv.ict@gmail.com" +":"+"w8c8aaff";
-//                String encode = Base64.encodeToString(newUser.getBytes(), Base64.DEFAULT);
-//                httpURLConnection.setRequestProperty("Authorization","Basic "+encode);
                 httpURLConnection.connect();
 
                 InputStream inputStream = httpURLConnection.getInputStream();

@@ -1,6 +1,8 @@
 package com.R4RSS.fragments;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,8 +20,14 @@ import com.R4RSS.GlobalValues;
 import com.R4RSS.r4r.AddRoom;
 import com.R4RSS.r4r.MainActivity;
 import com.R4RSS.r4r.R;
+import com.R4RSS.requests.DeleteRoomRequest;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
 
-import butterknife.Bind;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+
 
 /**
  * Created by Son on 4/30/2016.
@@ -35,11 +43,13 @@ public class LoginResult extends Fragment {
 
     public TextView tvPhoneUser;
 
-    public ImageButton btnLogout;
+    public ImageButton imageAction;
 
     public Button btnAddRoom;
 
     public Button btnListAddRoom;
+
+    private Context context = this.getActivity();
 
     @Nullable
     @Override
@@ -49,7 +59,8 @@ public class LoginResult extends Fragment {
         tvEmailUser = (TextView) rootView.findViewById(R.id.tvEmailUser);
         tvPhoneUser = (TextView) rootView.findViewById(R.id.tvPhoneUser);
         //tvDayUser = (TextView) rootView.findViewById(R.id.tvDayUser);
-        btnLogout = (ImageButton) rootView.findViewById(R.id.btnLogout);
+        imageAction = (ImageButton) rootView.findViewById(R.id.imageAction);
+
         btnAddRoom = (Button) rootView.findViewById(R.id.btnAddRoom);
         btnListAddRoom = (Button) rootView.findViewById(R.id.btnListAddRoom);
 
@@ -57,17 +68,18 @@ public class LoginResult extends Fragment {
         tvEmailUser.setText(GlobalValues.getEmail());
         tvPhoneUser.setText(GlobalValues.getPhone());
 
-        btnLogout.setOnClickListener(new View.OnClickListener() {
+        imageAction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Creating the instance of PopupMenu
-                PopupMenu popup = new PopupMenu(getActivity().getApplicationContext(), btnLogout);
+                PopupMenu popup = new PopupMenu(getActivity().getApplicationContext(), imageAction);
                 //Inflating the Popup using xml file
                 popup.getMenuInflater().inflate(R.menu.pop_menu, popup.getMenu());
 
                 //registering popup with OnMenuItemClickListener
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     public boolean onMenuItemClick(MenuItem item) {
+
                         int id = item.getItemId();
                         if (id == R.id.action_logout) {
                             GlobalValues.logout();
@@ -76,6 +88,39 @@ public class LoginResult extends Fragment {
                             Intent intent = new Intent(getActivity().getApplicationContext(), MainActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivity(intent);
+                        }
+
+                        if (id == R.id.action_delete_account) {
+
+                            com.android.volley.Response.Listener<String> responseListener = new com.android.volley.Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    try {
+                                        JSONObject jsonResponse = new JSONObject(response);
+                                        boolean status = Boolean.parseBoolean(jsonResponse.opt("status").toString());
+
+                                        if (status) {
+
+                                            Intent intent = new Intent(GlobalValues.getContex(), MainActivity.class);
+
+                                            context.startActivity(intent);
+                                        } else {
+                                            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                                            builder.setMessage("Delete Account Failed")
+                                                    .setNegativeButton("Retry", null)
+                                                    .create()
+                                                    .show();
+                                        }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            };
+//
+                            DeleteRoomRequest addRoomRequest = new DeleteRoomRequest(GlobalValues.getId(), responseListener);
+                            RequestQueue queue = Volley.newRequestQueue(context);
+                            queue.add(addRoomRequest);
+
                         }
                         return true;
                     }
@@ -87,6 +132,14 @@ public class LoginResult extends Fragment {
         });
 
         btnAddRoom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity().getApplicationContext(), AddRoom.class);
+                startActivity(intent);
+            }
+        });
+
+        btnListAddRoom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity().getApplicationContext(), AddRoom.class);

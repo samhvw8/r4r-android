@@ -40,7 +40,7 @@ public class UploadService {
         this.mContext = new WeakReference<>(context);
     }
 
-    public void Execute(final Context context,final String city,final String ward,final String district,final String street,final int price,final double area,final String description, Upload upload, Callback<ImageResponse> callback) {
+    public void Execute(final Context context, final String city, final String ward, final String district, final String street, final int price, final double area, final String description, Upload upload, Callback<ImageResponse> callback) {
         final Callback<ImageResponse> cb = callback;
 
         if (!NetworkUtils.isConnected(mContext.get())) {
@@ -81,7 +81,6 @@ public class UploadService {
                                 @Override
                                 public void onResponse(String response) {
                                     try {
-                                        String result = response;
                                         JSONObject jsonResponse = new JSONObject(response);
                                         boolean status = Boolean.parseBoolean(jsonResponse.opt("status").toString());
 

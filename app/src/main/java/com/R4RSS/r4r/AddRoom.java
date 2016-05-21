@@ -17,25 +17,21 @@ import android.widget.ImageView;
 
 import com.R4RSS.helpers.DocumentHelper;
 import com.R4RSS.helpers.IntentHelper;
-import com.R4RSS.helpers.NotificationHelper;
+
 import com.R4RSS.imgurmodel.ImageResponse;
 import com.R4RSS.imgurmodel.Upload;
 import com.R4RSS.services.UploadService;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.toolbox.Volley;
+
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.R4RSS.requests.AddRoomRequest;
+
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.File;
 
-import butterknife.OnClick;
+
 import retrofit.Callback;
 import retrofit.RetrofitError;
 
@@ -43,15 +39,6 @@ import retrofit.RetrofitError;
  * Created by Son on 5/3/2016.
  */
 public class AddRoom extends AppCompatActivity {
-
-    private static final String MyPREFERENCES = "MyPrefs";
-    private static final String Name = "name";
-    private static final String Phone = "phone";
-    private static final String Email = "email";
-    private static final String Status = "status";
-    private static final String CreatedDay = "created_at";
-    private static final String Id = "id";
-    SharedPreferences sharedPreferences;
 
     EditText etAddStreet;
     EditText etAddWard;
@@ -93,8 +80,6 @@ public class AddRoom extends AppCompatActivity {
             }
         });
 
-        sharedPreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -118,7 +103,6 @@ public class AddRoom extends AppCompatActivity {
 //                SharedPreferences sharedPreferences = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
 //                String userId = sharedPreferences.getString(Id, null);
 //                id = Integer.parseInt(userId);
-
 
 
                 uploadImage(AddRoom.this, city, ward, district, street, price, area, description);
@@ -174,7 +158,7 @@ public class AddRoom extends AppCompatActivity {
     }
 
 
-    public void uploadImage(Context context, String city,String ward,String district,String street,int price,double area,String description) {
+    public void uploadImage(Context context, String city, String ward, String district, String street, int price, double area, String description) {
     /*
       Create the @Upload object
      */
