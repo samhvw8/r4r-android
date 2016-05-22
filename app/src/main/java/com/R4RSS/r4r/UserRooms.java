@@ -1,157 +1,240 @@
 package com.R4RSS.r4r;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
+
+import com.R4RSS.GlobalValues;
+import com.R4RSS.adapters.RoomAdapter;
+import com.R4RSS.models.RoomModel;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
 
 /**
  * Created by sinzi on 5/22/2016.
  */
 public class UserRooms extends AppCompatActivity {
 
-    EditText etAddStreet;
-    EditText etAddWard;
-    EditText etAddDistrict;
-    EditText etAddCity;
-    EditText etAddPrice;
-    EditText etAddArea;
-    EditText etAddRoomDes;
-    ImageView uploadImage;
-    Button btnAdd;
+
+    ListView lvRoom;
+    //Waiting Dialog
+    ProgressDialog mProgressDialog;
+    //set limit to show
+    private int limit = 7;
+
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
-    private GoogleApiClient client;
-    private Upload upload; // Upload object containging image and meta data
-    private File chosenFile; //chosen file from intent
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.loginpopup);
 
-        //create pop up window
-        DisplayMetrics dm = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(dm);
+        setContentView(R.layout.home);
 
-        int width = dm.widthPixels;
-        int height = dm.heightPixels;
 
-        getWindow().setLayout((int) (width * .6), (int) (height * .4));
+        DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
+                .cacheInMemory(true)
+                .cacheOnDisk(true)
+                .build();
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
+                .defaultDisplayImageOptions(defaultOptions)
+                .build();
+        ImageLoader.getInstance().init(config); // Do it on Application start
+        lvRoom = (ListView) findViewById(R.id.lvRoom);
 
-        //consider input vaule to login
+        // fab
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
-        final EditText etUserName = (EditText) findViewById(R.id.etUsername);
-        final EditText etPassword = (EditText) findViewById(R.id.etPassword);
-        final Button btnPopLogin = (Button) findViewById(R.id.btnPopLogin);
 
-        btnPopLogin.setOnClickListener(new View.OnClickListener() {
+        boolean status = Boolean.parseBoolean(GlobalValues.getStatus());
+
+        if (status) {
+            fab.setVisibility(View.VISIBLE);
+        } else {
+            fab.setVisibility(View.INVISIBLE);
+        }
+
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String email = etUserName.getText().toString();
-                final String password = etPassword.getText().toString();
-                final String base64Source = email + ":" + password;
-                final String base64String = "Basic " + Base64.encodeToString(base64Source.getBytes(), Base64.DEFAULT);
-
-
-                RequestQueue queue = Volley.newRequestQueue(PopLogin.this);
-                JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, GlobalValues.LOGIN_REQUEST_URL, null,
-                        new Response.Listener<JSONObject>() {
-                            @Override
-                            public void onResponse(JSONObject response) {
-                                // display response
-                                Log.d("Response", response.toString());
-                                //save info into share preference to later use
-                                boolean status = Boolean.parseBoolean(response.opt("status").toString());
-                                if (status) {
-
-                                    String day;
-                                    int id;
-                                    try {
-                                        JSONObject data = response.getJSONObject("data");
-                                        JSONObject user = data.getJSONObject("user");
-
-                                        String name = user.getString("name");
-                                        String phone = user.getString("phone");
-                                        day = user.getString("created_at");
-                                        id = Integer.parseInt(user.optString("id").toString());
-
-
-                                        String statusPass = Boolean.toString(status);
-
-                                        GlobalValues.login(base64String, name, phone, email, statusPass, day, id);
-
-                                        Intent intent = new Intent(PopLogin.this, MainActivity.class);
-                                        startActivity(intent);
-
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            }
-                        },
-                        new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                Log.d("Error.Response", error.toString());
-                            }
-                        }
-                ) {
-                    @Override
-                    public Map<String, String> getHeaders() throws AuthFailureError {
-                        HashMap<String, String> headers = new HashMap<String, String>();
-                        headers.put("Authorization", base64String);
-                        return headers;
-                    }
-                };
-
-                // add it to the RequestQueue
-                queue.add(getRequest);
+                Intent intent = new Intent(UserRooms.this, AddRoom.class);
+                startActivity(intent);
             }
-
         });
 
 
+        lvRoom.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position,
+                                    long id) {
+                RoomModel room = (RoomModel) lvRoom.getItemAtPosition(position);
+                //get dia chi vao activity RoomDetail
+                String street = room.getStreet();
+                String ward = room.getWard();
+                String district = room.getDistrict();
+                String city = room.getCity();
+                String address = street + "-" + ward + "-" + district + "-" + city + "\n";
+                String price = Integer.toString(room.getPrice()) + "VND\n";
+                String area = Double.toString(room.getArea()) + "m2\n";
+                String description = room.getDescription() + "\n";
+                //get toa do vao activity RoomDetail
+//                String lat = Double.toString(room.getLatitude());
+//                String lng = Double.toString(room.getLongtitude());
+                double lat = room.getLatitude();
+                double lng = room.getLongtitude();
+                Intent intent = new Intent(UserRooms.this, RoomDetail.class);
+                intent.putExtra("price", price);
+                intent.putExtra("address", address);
+                intent.putExtra("area", area);
+                intent.putExtra("description", description);
+                intent.putExtra("lat", lat);
+                intent.putExtra("lng", lng);
+                startActivity(intent);
+            }
+        });
+
     }
 
 
     @Override
-    public void onStart() {
-        super.onStart();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client.connect();
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
-                "AddRoom Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app URL is correct.
-                Uri.parse("android-app://com.R4RSS.r4r/http/host/path")
-        );
-        AppIndex.AppIndexApi.start(client, viewAction);
+    public void onResume() {
+        super.onResume();
+        new LoadEvents().execute();
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
+    private class LoadEvents extends AsyncTask<String, String, List<RoomModel>> {
 
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
-                "AddRoom Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app URL is correct.
-                Uri.parse("android-app://com.R4RSS.r4r/http/host/path")
-        );
-        AppIndex.AppIndexApi.end(client, viewAction);
-        client.disconnect();
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            // Create a progressdialog
+            mProgressDialog = new ProgressDialog(UserRooms.this);
+            // Set progressdialog title
+            mProgressDialog.setTitle("Load User's room");
+            // Set progressdialog message
+            mProgressDialog.setMessage("Loading...");
+            mProgressDialog.setIndeterminate(false);
+            // Show progressdialog
+            mProgressDialog.show();
+        }
+
+        @Override
+        protected List<RoomModel> doInBackground(String... params) {
+
+
+            try {
+                URL url = new URL(GlobalValues.getUserRoomRequestUrl());
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.setRequestProperty("Authorization", GlobalValues.getAuth());
+                httpURLConnection.connect();
+
+                InputStream inputStream = httpURLConnection.getInputStream();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+
+                StringBuffer buffer = new StringBuffer();
+
+                String line = "";
+                while ((line = bufferedReader.readLine()) != null) {
+                    buffer.append(line);
+                }
+
+                String finalJson = buffer.toString();
+                JSONObject parentObject = new JSONObject(finalJson);
+                JSONObject dataObject = parentObject.getJSONObject("data");
+                JSONArray roomArray = dataObject.getJSONArray("rooms");
+
+                List<RoomModel> roomModelList = new ArrayList<>();
+                Log.d("Response", roomArray.toString());
+                for (int i = 0; i < roomArray.length(); i++) {
+                    JSONObject finalObject = roomArray.getJSONObject(i);
+                    RoomModel roomModel = new RoomModel();
+                    if (!finalObject.getString("image_album_url").equals("null"))
+                        roomModel.setImage_album_url(finalObject.getString("image_album_url"));
+
+                    roomModel.setPrice(Integer.parseInt(finalObject.optString("price").toString()));
+                    roomModel.setCity(finalObject.getString("city"));
+                    roomModel.setDistrict(finalObject.getString("district"));
+                    roomModel.setWard(finalObject.getString("ward"));
+                    roomModel.setStreet(finalObject.getString("street"));
+                    roomModel.setDescription(finalObject.getString("description"));
+                    roomModel.setArea(Double.parseDouble(finalObject.optString("area").toString()));
+                    //get create day
+                    String createDay = finalObject.getString("created_at");
+                    StringTokenizer tokenDay = new StringTokenizer(createDay, " ");
+                    roomModel.setCreated_day(tokenDay.nextToken().toString());
+
+
+                    //add kinh vi do
+                    //getkinh do vi do version 2
+                    if (!finalObject.optString("latitude").toString().equals("null"))
+                        roomModel.setLatitude(Double.parseDouble(finalObject.optString("latitude").toString()));
+                    if (!finalObject.optString("longitude").toString().equals("null"))
+                        roomModel.setLongtitude(Double.parseDouble(finalObject.optString("longitude").toString()));
+
+                    // adding the final object in the list
+                    roomModelList.add(roomModel);
+
+
+                }
+                httpURLConnection.disconnect();
+                return roomModelList;
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+
+        @Override
+        protected void onProgressUpdate(String... values) {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected void onPostExecute(List<RoomModel> result) {
+
+            super.onPostExecute(result);
+
+            RoomAdapter adapter = new RoomAdapter(UserRooms.this, R.layout.room_feed, result);
+
+            lvRoom.setAdapter(adapter);
+            //close the loading dialog
+            mProgressDialog.dismiss();
+        }
     }
+
 
 }
+

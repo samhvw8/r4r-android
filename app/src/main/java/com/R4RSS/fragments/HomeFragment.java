@@ -134,10 +134,6 @@ public class HomeFragment extends Fragment {
         new LoadEvents().execute();
     }
 
-    private void getJSON(View view) {
-
-    }
-
     private class LoadEvents extends AsyncTask<String, String, List<RoomModel>> {
 
         @Override
@@ -181,7 +177,7 @@ public class HomeFragment extends Fragment {
 //                inputStream.close();
 //                httpURLConnection.disconnect();
                 List<RoomModel> roomModelList = new ArrayList<>();
-                Log.d("Response", roomArray.toString());
+//                Log.d("Response", roomArray.toString());
                 for (int i = 0; i < roomArray.length(); i++) {
                     JSONObject finalObject = roomArray.getJSONObject(i);
                     RoomModel roomModel = new RoomModel();

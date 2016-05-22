@@ -24,10 +24,6 @@ public class FindInMapRequest extends StringRequest {
         params.put("latitude",lat +"");
         params.put("longitude",lng + "");
 
-//        params.put("name",name);
-//        params.put("password",password);
-//        params.put("email",email);
-//        params.put("phone",phone);
     }
 
     @Override

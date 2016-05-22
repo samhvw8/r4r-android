@@ -27,15 +27,24 @@ public class GlobalValues {
 
     public static final String LOGIN_REQUEST_URL = "http://52.36.12.106/api/v1/login";
     public static final String ADD_ROOM_REQUEST_URL = "http://52.36.12.106/api/v1/room";
+    private static final String _USER_ROOM_REQUEST_URL = "http://52.36.12.106/api/v1/user/";
     public static final String FIND_IN_MAP_URL = "";
+
+    private static String USER_ROOM_REQUEST_URL;
 
 
     public static SharedPreferences sharedPreferences;
 
     private static Context preCon;
 
-    public static void init(Context context){
+    public static void init(Context context) {
+
         preCon = context;
+
+        if(getStatus().equals("true")) {
+            USER_ROOM_REQUEST_URL = _USER_ROOM_REQUEST_URL + Integer.toString(getId()) + "/rooms";
+        }
+
     }
 
     public static void logout() {
@@ -44,6 +53,8 @@ public class GlobalValues {
         editor.clear();
         editor.putString("status", "false");
         editor.commit();
+
+        USER_ROOM_REQUEST_URL = null;
     }
 
     public static void login(String auth, String name, String phone, String email, String status, String createdDay, int id) {
@@ -57,8 +68,11 @@ public class GlobalValues {
         editor.putString("created_day", createdDay);
         editor.putInt("id", id);
         editor.commit();
+
+        USER_ROOM_REQUEST_URL = _USER_ROOM_REQUEST_URL + Integer.toString(getId()) + "/rooms";
     }
-    public static Context getContex(){
+
+    public static Context getContex() {
         return preCon;
     }
 
@@ -97,5 +111,9 @@ public class GlobalValues {
     public static String getAuth() {
         sharedPreferences = preCon.getSharedPreferences("r4r", Context.MODE_PRIVATE);
         return sharedPreferences.getString("auth", null);
+    }
+
+    public static String getUserRoomRequestUrl() {
+        return USER_ROOM_REQUEST_URL;
     }
 }

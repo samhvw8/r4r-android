@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,7 +19,8 @@ import com.R4RSS.GlobalValues;
 import com.R4RSS.r4r.AddRoom;
 import com.R4RSS.r4r.MainActivity;
 import com.R4RSS.r4r.R;
-import com.R4RSS.requests.DeleteRoomRequest;
+import com.R4RSS.r4r.UserRooms;
+import com.R4RSS.requests.DeleteUserRequest;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
@@ -49,7 +49,7 @@ public class LoginResult extends Fragment {
 
     public Button btnListAddRoom;
 
-    private Context context = this.getActivity();
+    private Context context;
 
     @Nullable
     @Override
@@ -67,7 +67,7 @@ public class LoginResult extends Fragment {
         tvNameUser.setText(GlobalValues.getName());
         tvEmailUser.setText(GlobalValues.getEmail());
         tvPhoneUser.setText(GlobalValues.getPhone());
-
+        context = this.getActivity();
         imageAction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,6 +103,8 @@ public class LoginResult extends Fragment {
 
                                             Intent intent = new Intent(GlobalValues.getContex(), MainActivity.class);
 
+                                            GlobalValues.logout();
+
                                             context.startActivity(intent);
                                         } else {
                                             AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -117,7 +119,7 @@ public class LoginResult extends Fragment {
                                 }
                             };
 //
-                            DeleteRoomRequest addRoomRequest = new DeleteRoomRequest(GlobalValues.getId(), responseListener);
+                            DeleteUserRequest addRoomRequest = new DeleteUserRequest(GlobalValues.getId(), responseListener);
                             RequestQueue queue = Volley.newRequestQueue(context);
                             queue.add(addRoomRequest);
 
@@ -142,7 +144,7 @@ public class LoginResult extends Fragment {
         btnListAddRoom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity().getApplicationContext(), AddRoom.class);
+                Intent intent = new Intent(getActivity().getApplicationContext(), UserRooms.class);
                 startActivity(intent);
             }
         });

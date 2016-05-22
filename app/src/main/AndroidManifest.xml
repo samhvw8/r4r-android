@@ -61,6 +61,10 @@
             android:label="AddRoom"
             ></activity>
 
+        <activity android:name="com.R4RSS.r4r.UserRooms"
+            android:label="UserRooms"
+            ></activity>
+
         <activity android:name="com.R4RSS.r4r.PopLogin"
             android:theme="@style/AppTheme.CustomTheme">
 

@@ -1,8 +1,5 @@
 package com.R4RSS.requests;
 
-import android.content.SharedPreferences;
-import android.util.Base64;
-
 import com.R4RSS.GlobalValues;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
@@ -42,10 +39,10 @@ public class AddRoomRequest extends StringRequest {
 
     @Override
     public Map<String, String> getHeaders() throws AuthFailureError {
-        HashMap<String, String> params = new HashMap<String, String>();
+        HashMap<String, String> header = new HashMap<String, String>();
 
         String auth = GlobalValues.getAuth();
-        params.put("Authorization", auth);
-        return params;
+        header.put("Authorization", auth);
+        return header;
     }
 }

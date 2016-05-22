@@ -11,12 +11,12 @@ import java.util.Map;
 /**
  * Created by sinzi on 5/21/2016.
  */
-public class DeleteRoomRequest extends StringRequest {
+public class DeleteUserRequest extends StringRequest {
 
-    private static final String DELETE_REQUEST_URL = "http://52.36.12.106/api/v1/room/";
+    private static final String DELETE_REQUEST_URL = "http://52.36.12.106/api/v1/user/";
     private Map<String, String> params;
 
-    public DeleteRoomRequest(int id, Response.Listener<String> listener) {
+    public DeleteUserRequest(int id, Response.Listener<String> listener) {
         super(Method.DELETE, DELETE_REQUEST_URL + Integer.toString(id), listener, null);
     }
 
@@ -29,11 +29,11 @@ public class DeleteRoomRequest extends StringRequest {
 
     @Override
     public Map<String, String> getHeaders() throws AuthFailureError {
-        HashMap<String, String> params = new HashMap<String, String>();
+        HashMap<String, String> header = new HashMap<String, String>();
 
         String auth = GlobalValues.getAuth();
-        params.put("Authorization", auth);
-        return params;
+        header.put("Authorization", auth);
+        return header;
     }
 }
 
