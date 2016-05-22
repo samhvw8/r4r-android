@@ -237,7 +237,8 @@ public class HomeFragment extends Fragment {
 
             super.onPostExecute(result);
 
-            RoomAdapter adapter = new RoomAdapter(getActivity().getApplicationContext(), R.layout.room_feed, result);
+
+            RoomAdapter adapter = new RoomAdapter(getActivity(), R.layout.room_feed, result);
 
             lvRoom.setAdapter(adapter);
             //close the loading dialog

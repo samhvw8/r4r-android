@@ -101,7 +101,7 @@ public class LoginResult extends Fragment {
 
                                         if (status) {
 
-                                            Intent intent = new Intent(GlobalValues.getContex(), MainActivity.class);
+                                            Intent intent = new Intent(GlobalValues.getContext(), MainActivity.class);
 
                                             GlobalValues.logout();
 

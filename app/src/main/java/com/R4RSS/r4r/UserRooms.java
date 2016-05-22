@@ -14,8 +14,7 @@ import android.widget.ListView;
 import com.R4RSS.GlobalValues;
 import com.R4RSS.adapters.RoomAdapter;
 import com.R4RSS.models.RoomModel;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
+
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -55,7 +54,7 @@ public class UserRooms extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.home);
+        setContentView(R.layout.view_list);
 
 
         DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
@@ -167,6 +166,7 @@ public class UserRooms extends AppCompatActivity {
                 }
 
                 String finalJson = buffer.toString();
+
                 JSONObject parentObject = new JSONObject(finalJson);
                 JSONObject dataObject = parentObject.getJSONObject("data");
                 JSONArray roomArray = dataObject.getJSONArray("rooms");
@@ -230,6 +230,7 @@ public class UserRooms extends AppCompatActivity {
         protected void onPostExecute(List<RoomModel> result) {
 
             super.onPostExecute(result);
+
 
             RoomAdapter adapter = new RoomAdapter(UserRooms.this, R.layout.room_feed, result);
 

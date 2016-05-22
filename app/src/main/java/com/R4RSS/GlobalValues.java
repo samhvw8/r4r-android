@@ -35,11 +35,13 @@ public class GlobalValues {
 
     public static SharedPreferences sharedPreferences;
 
-    private static Context preCon;
+    private static Context initCon;
+
+
 
     public static void init(Context context) {
 
-        preCon = context;
+        initCon = context;
 
         if(getStatus().equals("true")) {
             USER_ROOM_REQUEST_URL = _USER_ROOM_REQUEST_URL + Integer.toString(getId()) + "/rooms";
@@ -48,7 +50,7 @@ public class GlobalValues {
     }
 
     public static void logout() {
-        sharedPreferences = preCon.getSharedPreferences("r4r", Context.MODE_PRIVATE);
+        sharedPreferences = initCon.getSharedPreferences("r4r", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
         editor.putString("status", "false");
@@ -58,7 +60,7 @@ public class GlobalValues {
     }
 
     public static void login(String auth, String name, String phone, String email, String status, String createdDay, int id) {
-        sharedPreferences = preCon.getSharedPreferences("r4r", Context.MODE_PRIVATE);
+        sharedPreferences = initCon.getSharedPreferences("r4r", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("auth", auth);
         editor.putString("name", name);
@@ -72,44 +74,44 @@ public class GlobalValues {
         USER_ROOM_REQUEST_URL = _USER_ROOM_REQUEST_URL + Integer.toString(getId()) + "/rooms";
     }
 
-    public static Context getContex() {
-        return preCon;
+    public static Context getContext() {
+        return initCon;
     }
 
     public static String getName() {
-        sharedPreferences = preCon.getSharedPreferences("r4r", Context.MODE_PRIVATE);
+        sharedPreferences = initCon.getSharedPreferences("r4r", Context.MODE_PRIVATE);
         return sharedPreferences.getString("name", null);
     }
 
     public static String getPhone() {
-        sharedPreferences = preCon.getSharedPreferences("r4r", Context.MODE_PRIVATE);
+        sharedPreferences = initCon.getSharedPreferences("r4r", Context.MODE_PRIVATE);
         return sharedPreferences.getString("phone", null);
     }
 
     public static String getEmail() {
-        sharedPreferences = preCon.getSharedPreferences("r4r", Context.MODE_PRIVATE);
+        sharedPreferences = initCon.getSharedPreferences("r4r", Context.MODE_PRIVATE);
         return sharedPreferences.getString("email", null);
     }
 
     public static String getStatus() {
 
-        sharedPreferences = preCon.getSharedPreferences("r4r", Context.MODE_PRIVATE);
+        sharedPreferences = initCon.getSharedPreferences("r4r", Context.MODE_PRIVATE);
         return sharedPreferences.getString("status", null);
     }
 
     public static String getCreatedDay() {
-        sharedPreferences = preCon.getSharedPreferences("r4r", Context.MODE_PRIVATE);
+        sharedPreferences = initCon.getSharedPreferences("r4r", Context.MODE_PRIVATE);
         return sharedPreferences.getString("created_day", null);
     }
 
     public static int getId() {
 
-        sharedPreferences = preCon.getSharedPreferences("r4r", Context.MODE_PRIVATE);
+        sharedPreferences = initCon.getSharedPreferences("r4r", Context.MODE_PRIVATE);
         return sharedPreferences.getInt("id", -1);
     }
 
     public static String getAuth() {
-        sharedPreferences = preCon.getSharedPreferences("r4r", Context.MODE_PRIVATE);
+        sharedPreferences = initCon.getSharedPreferences("r4r", Context.MODE_PRIVATE);
         return sharedPreferences.getString("auth", null);
     }
 

@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.R4RSS.GlobalValues;
 import com.R4RSS.adapters.RoomAdapter;
 import com.R4RSS.models.RoomModel;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -33,7 +34,7 @@ public class SearchResult extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.setContentView(R.layout.search_result_layout);
+        this.setContentView(R.layout.view_list);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -87,6 +88,7 @@ public class SearchResult extends AppCompatActivity {
                 // adding the final object in the list
                 roomModelList.add(roomModel);
             }
+
 
             RoomAdapter adapter = new RoomAdapter(SearchResult.this, R.layout.room_feed, roomModelList);
 

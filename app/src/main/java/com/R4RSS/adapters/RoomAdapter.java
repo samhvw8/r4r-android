@@ -107,9 +107,7 @@ public class RoomAdapter extends ArrayAdapter {
 
                             if (status) {
 
-                                Intent intent = new Intent(GlobalValues.getContex(), UserRooms.class);
-
-                                GlobalValues.logout();
+                                Intent intent = new Intent(getContext(), getContext().getClass());
 
                                 getContext().startActivity(intent);
                             } else {
@@ -144,7 +142,7 @@ public class RoomAdapter extends ArrayAdapter {
 //
 //                            if (status) {
 //
-//                                Intent intent = new Intent(GlobalValues.getContex(), UserRooms.class);
+//                                Intent intent = new Intent(GlobalValues.getContext(), UserRooms.class);
 //
 //                                GlobalValues.logout();
 //
