@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -55,6 +56,8 @@ public class UserRooms extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.view_list);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
 
         DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
@@ -237,6 +240,22 @@ public class UserRooms extends AppCompatActivity {
             lvRoom.setAdapter(adapter);
             //close the loading dialog
             mProgressDialog.dismiss();
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+
+
+                Intent intent = new Intent(UserRooms.this, MainActivity.class);
+
+                UserRooms.this.startActivity(intent);
+
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 
