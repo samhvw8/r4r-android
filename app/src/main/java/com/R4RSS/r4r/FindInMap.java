@@ -89,7 +89,6 @@ public class FindInMap extends AppCompatActivity {
         latLng[0] = new LatLng(21.0278, 105.8342);
 
 
-
 //        radius = Double.parseDouble(etRadius.getText().toString());
         googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
@@ -117,7 +116,7 @@ public class FindInMap extends AppCompatActivity {
                 googleMap.addMarker(new MarkerOptions().position(latLng[0]));
                 Circle circle = googleMap.addCircle(new CircleOptions()
                         .center(new LatLng(latitude, longitude))
-                        .radius(radius*1000)
+                        .radius(radius * 1000)
                         .strokeColor(Color.RED)
                         .strokeWidth(2)
                         .fillColor(Color.TRANSPARENT));
@@ -139,6 +138,13 @@ public class FindInMap extends AppCompatActivity {
                                     JSONObject finalObject = roomArray.getJSONObject(i);
                                     RoomModel roomModel = new RoomModel();
 
+                                    String street = finalObject.getString("street");
+                                    String district = finalObject.getString("district");
+                                    String ward = finalObject.getString("ward");
+                                    String city = finalObject.getString("city");
+
+                                    String address = street + "-" + district + "-" + ward + "-" + city;
+
                                     roomModel.setLatitude(Double.parseDouble(finalObject.optString("latitude").toString()));
                                     roomModel.setLongtitude(Double.parseDouble(finalObject.optString("longitude").toString()));
 
@@ -149,11 +155,10 @@ public class FindInMap extends AppCompatActivity {
                                     lng = roomModel.getLongtitude();
 
                                     LatLng roomLocation = new LatLng(lat, lng);
-                                    Marker TP = googleMap.addMarker(new MarkerOptions().position(roomLocation));
+                                    Marker TP = googleMap.addMarker(new MarkerOptions().position(roomLocation).title(address).icon(BitmapDescriptorFactory
+                                            .defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
 
-                            }
-
-
+                                }
 
 
                             } else {

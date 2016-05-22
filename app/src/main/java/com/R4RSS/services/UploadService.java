@@ -11,6 +11,7 @@ import com.R4RSS.imgurmodel.ImgurAPI;
 import com.R4RSS.imgurmodel.Upload;
 import com.R4RSS.r4r.MainActivity;
 import com.R4RSS.requests.AddRoomRequest;
+import com.R4RSS.requests.EditRoomRequest;
 import com.R4RSS.utils.NetworkUtils;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
@@ -40,7 +41,7 @@ public class UploadService {
         this.mContext = new WeakReference<>(context);
     }
 
-    public void Execute(final Context context, final String city, final String ward, final String district, final String street, final int price, final double area, final String description, Upload upload, Callback<ImageResponse> callback) {
+    public void Execute(final int control,final Context context, final String city, final String ward, final String district, final String street, final int price, final double area, final String description, Upload upload, Callback<ImageResponse> callback) {
         final Callback<ImageResponse> cb = callback;
 
         if (!NetworkUtils.isConnected(mContext.get())) {
@@ -85,6 +86,7 @@ public class UploadService {
                                         boolean status = Boolean.parseBoolean(jsonResponse.opt("status").toString());
 
                                         if (status) {
+
                                             Intent intent = new Intent(context, MainActivity.class);
 
                                             context.startActivity(intent);
@@ -101,9 +103,17 @@ public class UploadService {
                                 }
                             };
 //
-                            AddRoomRequest addRoomRequest = new AddRoomRequest(city, ward, district, street, price, area, description, imageResponse.data.link, responseListener);
-                            RequestQueue queue = Volley.newRequestQueue(context);
-                            queue.add(addRoomRequest);
+                            if(control == 0) {
+                                AddRoomRequest addRoomRequest = new AddRoomRequest(city, ward, district, street, price, area, description, imageResponse.data.link, responseListener);
+                                RequestQueue queue = Volley.newRequestQueue(context);
+                                queue.add(addRoomRequest);
+                            }
+
+                            if(control != 0){
+                                EditRoomRequest editRoomRequest = new EditRoomRequest(control,city, ward, district, street, price, area, description, imageResponse.data.link, responseListener);
+                                RequestQueue queue = Volley.newRequestQueue(context);
+                                queue.add(editRoomRequest);
+                            }
 
                         }
                     }

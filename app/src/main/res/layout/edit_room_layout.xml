@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/rootViewEdit"
+    tools:context="com.R4RSS.r4r.EditRoom">
+
+
+    <ScrollView
+        android:layout_width = "match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="206dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Address:"
+                    android:textStyle="bold"
+                    android:padding="10dp"
+                    android:id="@+id/textView" />
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="10dp">
+
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPostalAddress"
+                        android:hint="Street"
+                        android:ems="10"
+                        android:id="@+id/etEditStreet" />
+
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPostalAddress"
+                        android:hint="Ward"
+                        android:ems="10"
+                        android:id="@+id/etEditWard" />
+
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPostalAddress"
+                        android:hint="District"
+                        android:ems="10"
+                        android:id="@+id/etEditDistrict" />
+
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPostalAddress"
+                        android:hint="City"
+                        android:ems="10"
+                        android:id="@+id/etEditCity" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="101dp"
+                android:weightSum="1">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Price:"
+                    android:textStyle="bold"
+                    android:padding="10dp"
+                    android:id="@+id/textView2" />
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:hint="1000000"
+                    android:id="@+id/etEditPrice" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="97dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Area:"
+                    android:textStyle="bold"
+                    android:padding="10dp"
+                    android:id="@+id/textView7" />
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:ems="10"
+                    android:hint="43.4"
+                    android:id="@+id/etEditArea" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Description:"
+                    android:padding="10dp"
+                    android:textStyle="bold"
+                    android:id="@+id/textView9" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:hint="Add your description for the room"
+                    android:id="@+id/etEditRoomDes" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/imgEditUpload"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:adjustViewBounds="true"
+                android:maxHeight="250dp"
+                android:minHeight="250dp"
+                android:scaleType="center"
+                android:src="@drawable/ic_menu_gallery" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Edit"
+                android:id="@+id/btnEdit"
+                android:layout_gravity="bottom|center_horizontal"
+                />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

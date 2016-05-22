@@ -7,6 +7,10 @@
         />
 
     <item
+        android:id="@+id/action_edit"
+        android:title="Edit Account"/>
+
+    <item
         android:id="@+id/action_delete_account"
         android:title="Delete Accout"
         />

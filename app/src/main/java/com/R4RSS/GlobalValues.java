@@ -59,9 +59,10 @@ public class GlobalValues {
         USER_ROOM_REQUEST_URL = null;
     }
 
-    public static void login(String auth, String name, String phone, String email, String status, String createdDay, int id) {
+    public static void login(String auth, String pass, String name, String phone, String email, String status, String createdDay, int id) {
         sharedPreferences = initCon.getSharedPreferences("r4r", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("pass", pass);
         editor.putString("auth", auth);
         editor.putString("name", name);
         editor.putString("phone", phone);
@@ -113,6 +114,11 @@ public class GlobalValues {
     public static String getAuth() {
         sharedPreferences = initCon.getSharedPreferences("r4r", Context.MODE_PRIVATE);
         return sharedPreferences.getString("auth", null);
+    }
+
+    public static String getPass() {
+        sharedPreferences = initCon.getSharedPreferences("r4r", Context.MODE_PRIVATE);
+        return sharedPreferences.getString("pass", null);
     }
 
     public static String getUserRoomRequestUrl() {

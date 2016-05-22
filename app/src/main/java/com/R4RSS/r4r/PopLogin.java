@@ -87,7 +87,7 @@ public class PopLogin extends Activity {
 
                                         String statusPass = Boolean.toString(status);
 
-                                        GlobalValues.login(base64String, name, phone, email, statusPass, day, id);
+                                        GlobalValues.login(base64String, password, name, phone, email, statusPass, day, id);
 
                                         Intent intent = new Intent(PopLogin.this, MainActivity.class);
                                         startActivity(intent);

@@ -22,6 +22,7 @@ public class RoomDetail extends AppCompatActivity {
     TextView tvDescription;
     TextView tvArea;
     TextView price;
+    TextView tvContact;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,16 +61,19 @@ public class RoomDetail extends AppCompatActivity {
         String itemAddress = i.getStringExtra("address");
         String itemDescription = i.getStringExtra("description");
         String itemArea = i.getStringExtra("area");
+        String contact = i.getStringExtra("contact");
 
         tvDescription = (TextView) findViewById(R.id.tvDescription);
         tvAddressDetail = (TextView) findViewById(R.id.tvAddressDetail);
         tvArea = (TextView) findViewById(R.id.tvArea);
         price = (TextView) findViewById(R.id.tvPriceDetail);
+        tvContact = (TextView) findViewById(R.id.tvConttact);
 
         tvAddressDetail.setText(itemAddress);
         tvDescription.setText(itemDescription);
         tvArea.setText(itemArea);
         price.setText(itemPrice);
+        tvContact.setText(contact);
     }
 
     @Override

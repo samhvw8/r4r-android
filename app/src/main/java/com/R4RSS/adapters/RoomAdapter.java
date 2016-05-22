@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.R4RSS.GlobalValues;
 import com.R4RSS.models.RoomModel;
+import com.R4RSS.r4r.EditRoom;
 import com.R4RSS.r4r.MainActivity;
 import com.R4RSS.r4r.R;
 import com.R4RSS.r4r.UserRooms;
@@ -50,13 +51,15 @@ public class RoomAdapter extends ArrayAdapter {
         }
 
         ImageView imgRoom;
-        String tvStreet;
-        String tvWard;
-        String tvDistrict;
-        String tvCity;
-        String description;
+        final String tvStreet;
+        final String tvWard;
+        final String tvDistrict;
+        final String tvCity;
+        final String description;
+        final String price;
+        final String area;
         //TextView tvDescriptionRoom;
-        TextView tvPrice;
+        final TextView tvPrice;
         TextView Address;
         TextView tvTimestamp;
 
@@ -76,6 +79,10 @@ public class RoomAdapter extends ArrayAdapter {
         tvCity = roomAdapterList.get(position).getCity();
         tvDistrict = roomAdapterList.get(position).getDistrict();
         tvWard = roomAdapterList.get(position).getWard();
+        description = roomAdapterList.get(position).getDescription();
+        price = Integer.toString(roomAdapterList.get(position).getPrice());
+        area = Double.toString(roomAdapterList.get(position).getArea());
+
         tvTimestamp.setText(roomAdapterList.get(position).getCreated_day());
         tvPrice.setText("Price: " + Integer.toString(roomAdapterList.get(position).getPrice()) + "VND");
         Address.setText("Address:\n" + tvStreet + "-" + tvWard + "-" + tvDistrict + "-" + tvCity);
@@ -130,9 +137,23 @@ public class RoomAdapter extends ArrayAdapter {
         });
 
 
-//        edit.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
+        edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(getContext(), EditRoom.class);
+                String idUser = Integer.toString(id);
+                intent.putExtra("id",idUser);
+                intent.putExtra("street",tvStreet);
+                intent.putExtra("district",tvDistrict);
+                intent.putExtra("ward",tvWard);
+                intent.putExtra("city",tvCity);
+                intent.putExtra("price",price);
+                intent.putExtra("area",area);
+                intent.putExtra("description",description);
+
+                Log.d("idAdapter",id+"");
+                getContext().startActivity(intent);
 //                com.android.volley.Response.Listener<String> responseListener = new com.android.volley.Response.Listener<String>() {
 //                    @Override
 //                    public void onResponse(String response) {
@@ -163,8 +184,8 @@ public class RoomAdapter extends ArrayAdapter {
 //                DeleteRoomRequest request = new DeleteRoomRequest(userId, responseListener);
 //                RequestQueue queue = Volley.newRequestQueue(getContext());
 //                queue.add(request);
-//            }
-//        });
+            }
+        });
 
         return convertView;
     }

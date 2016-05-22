@@ -1,10 +1,18 @@
 package com.R4RSS.requests;
 
+import android.util.Log;
+
 import com.R4RSS.GlobalValues;
 import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
+import com.android.volley.ParseError;
 import com.android.volley.Response;
+import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,7 +34,8 @@ public class AddRoomRequest extends StringRequest {
         params.put("price", price + "");
         params.put("area", area + "");
         params.put("description", description);
-        params.put("image_album_url",imgUrl);
+        if(imgUrl != null)
+            params.put("image_album_url",imgUrl);
 
 
 
@@ -42,7 +51,26 @@ public class AddRoomRequest extends StringRequest {
         HashMap<String, String> header = new HashMap<String, String>();
 
         String auth = GlobalValues.getAuth();
+        header.put("Content-Type","application/x-www-form-urlencoded");
         header.put("Authorization", auth);
         return header;
+    }
+
+
+    @Override
+    protected Response parseNetworkResponse(NetworkResponse response) {
+        System.out.println(response.statusCode);
+        try {
+            Log.d("custom response", "[raw json]: " + (new String(response.data)));
+            Gson gson = new Gson();
+            String json = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
+            return Response.success(response.data,
+                    HttpHeaderParser.parseCacheHeaders(response));
+
+        } catch (UnsupportedEncodingException e) {
+            return Response.error(new ParseError(e));
+        } catch (JsonSyntaxException e) {
+            return Response.error(new ParseError(e));
+        }
     }
 }

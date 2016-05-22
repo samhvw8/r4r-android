@@ -17,6 +17,14 @@ import android.widget.ListView;
 import com.R4RSS.GlobalValues;
 import com.R4RSS.r4r.AddRoom;
 
+import com.R4RSS.r4r.MainActivity;
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -37,7 +45,9 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 import butterknife.OnClick;
@@ -56,6 +66,7 @@ public class HomeFragment extends Fragment {
 
 
     private static final String URL_SELECT = "http://52.36.12.106/api/v1/rooms";
+    private static final String USER_INFO_URL = "http://52.36.12.106/api/v1/user/";
 
 
     @Nullable
@@ -105,25 +116,69 @@ public class HomeFragment extends Fragment {
                 String ward = room.getWard();
                 String district = room.getDistrict();
                 String city = room.getCity();
-                String address = street + "-" + ward + "-" + district + "-" + city + "\n";
-                String price = Integer.toString(room.getPrice()) + "VND\n";
-                String area = Double.toString(room.getArea()) + "m2\n";
-                String description = room.getDescription() + "\n";
-                String userId = Integer.toString(room.getUserId());
+                final String address = street + "-" + ward + "-" + district + "-" + city + "\n";
+                final String price = Integer.toString(room.getPrice()) + "VND\n";
+                final String area = Double.toString(room.getArea()) + "m2\n";
+                final String description = room.getDescription() + "\n";
+                final String userId = Integer.toString(room.getUserId());
                 //get toa do vao activity RoomDetail
 //                String lat = Double.toString(room.getLatitude());
 //                String lng = Double.toString(room.getLongtitude());
-                double lat = room.getLatitude();
-                double lng = room.getLongtitude();
-                Intent intent = new Intent(getActivity().getApplicationContext(), RoomDetail.class);
-                intent.putExtra("price", price);
-                intent.putExtra("address", address);
-                intent.putExtra("area", area);
-                intent.putExtra("description", description);
-                intent.putExtra("lat", lat);
-                intent.putExtra("lng", lng);
-                intent.putExtra("userId", userId);
-                startActivity(intent);
+                final double lat = room.getLatitude();
+                final double lng = room.getLongtitude();
+
+
+                final RequestQueue queue = Volley.newRequestQueue(getActivity().getApplicationContext());
+                JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, USER_INFO_URL + userId, null,
+                        new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                // display response
+                                Log.d("Response", response.toString());
+                                //save info into share preference to later use
+                                boolean status = Boolean.parseBoolean(response.opt("status").toString());
+                                if (status) {
+
+                                    String day;
+                                    int id;
+                                    try {
+                                        JSONObject data = response.getJSONObject("data");
+                                        JSONObject user = data.getJSONObject("user");
+
+                                        String phone = user.getString("phone");
+                                        String email = user.getString("email");
+                                        String contact = "Email : "+ email +"\n"+ "Phone : " + phone;
+
+                                        Intent intent = new Intent(getActivity().getApplicationContext(), RoomDetail.class);
+                                        intent.putExtra("price", price);
+                                        intent.putExtra("address", address);
+                                        intent.putExtra("area", area);
+                                        intent.putExtra("description", description);
+                                        intent.putExtra("lat", lat);
+                                        intent.putExtra("lng", lng);
+                                        intent.putExtra("userId", userId);
+                                        intent.putExtra("contact", contact);
+
+                                        startActivity(intent);
+
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.d("Error.Response", error.toString());
+                            }
+                        }
+                ) {
+                };
+
+                // add it to the RequestQueue
+                queue.add(getRequest);
+
             }
         });
         return rootView;

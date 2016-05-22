@@ -91,7 +91,7 @@ public class PopRegister extends Activity {
                                 final String base64Source = email + ":" + password;
                                 final String base64String = "Basic " + Base64.encodeToString(base64Source.getBytes(), Base64.DEFAULT);
                                 String statusPass = Boolean.toString(status);
-                                GlobalValues.login(base64String, name, phone, email, statusPass, day, id);
+                                GlobalValues.login(base64String, password, name, phone, email, statusPass, day, id);
 
                                 Intent intent = new Intent(PopRegister.this, MainActivity.class);
                                 startActivity(intent);

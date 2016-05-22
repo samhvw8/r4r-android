@@ -61,8 +61,16 @@
             android:label="AddRoom"
             ></activity>
 
+        <activity android:name="com.R4RSS.r4r.EditRoom"
+            android:label="EditRoom"
+            ></activity>
+
         <activity android:name="com.R4RSS.r4r.UserRooms"
             android:label="UserRooms"
+            ></activity>
+
+        <activity android:name="com.R4RSS.r4r.EditUser"
+            android:label="EditUser"
             ></activity>
 
         <activity android:name="com.R4RSS.r4r.PopLogin"

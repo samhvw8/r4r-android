@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.R4RSS.GlobalValues;
 import com.R4RSS.r4r.AddRoom;
+import com.R4RSS.r4r.EditUser;
 import com.R4RSS.r4r.MainActivity;
 import com.R4RSS.r4r.R;
 import com.R4RSS.r4r.UserRooms;
@@ -90,6 +91,11 @@ public class LoginResult extends Fragment {
                             startActivity(intent);
                         }
 
+                        if(id == R.id.action_edit){
+                            Intent intent = new Intent(getActivity().getApplicationContext(), EditUser.class);
+                            startActivity(intent);
+                        }
+
                         if (id == R.id.action_delete_account) {
 
                             com.android.volley.Response.Listener<String> responseListener = new com.android.volley.Response.Listener<String>() {
@@ -101,7 +107,7 @@ public class LoginResult extends Fragment {
 
                                         if (status) {
 
-                                            Intent intent = new Intent(GlobalValues.getContext(), MainActivity.class);
+                                            Intent intent = new Intent(context, MainActivity.class);
 
                                             GlobalValues.logout();
 

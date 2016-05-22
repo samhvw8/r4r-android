@@ -3,13 +3,12 @@ package com.R4RSS.r4r;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -18,49 +17,44 @@ import android.widget.ImageView;
 
 import com.R4RSS.helpers.DocumentHelper;
 import com.R4RSS.helpers.IntentHelper;
-
 import com.R4RSS.imgurmodel.ImageResponse;
 import com.R4RSS.imgurmodel.Upload;
 import com.R4RSS.requests.AddRoomRequest;
 import com.R4RSS.requests.EditRoomRequest;
 import com.R4RSS.services.UploadService;
-
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
-
 import com.squareup.picasso.Picasso;
-
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
 
-
 import retrofit.Callback;
 import retrofit.RetrofitError;
 
 /**
- * Created by Son on 5/3/2016.
+ * Created by sinzi on 5/22/2016.
  */
-public class AddRoom extends AppCompatActivity {
+public class EditRoom extends AppCompatActivity {
 
-    EditText etAddStreet;
-    EditText etAddWard;
-    EditText etAddDistrict;
-    EditText etAddCity;
-    EditText etAddPrice;
-    EditText etAddArea;
-    EditText etAddRoomDes;
-    ImageView uploadImage;
-    Button btnAdd;
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
+    EditText etStreet;
+    EditText etDistrict;
+    EditText etWard;
+    EditText etCity;
+    EditText etPrice;
+    EditText etArea;
+    EditText etDescription;
+    Button btnEdit;
+    ImageView imgEditUpload;
+
+    int id;
+
+
     private GoogleApiClient client;
     private Upload upload; // Upload object containging image and meta data
     private File chosenFile; //chosen file from intent
@@ -68,22 +62,45 @@ public class AddRoom extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.add_room_layout);
+        setContentView(R.layout.edit_room_layout);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        etAddStreet = (EditText) findViewById(R.id.etAddStreet);
-        etAddWard = (EditText) findViewById(R.id.etAddWard);
-        etAddDistrict = (EditText) findViewById(R.id.etAddDistrict);
-        etAddCity = (EditText) findViewById(R.id.etAddCity);
-        etAddPrice = (EditText) findViewById(R.id.etAddPrice);
-        etAddArea = (EditText) findViewById(R.id.etAddArea);
-        etAddRoomDes = (EditText) findViewById(R.id.etAddRoomDes);
-        uploadImage = (ImageView) findViewById(R.id.imgUpload);
-        btnAdd = (Button) findViewById(R.id.btnAdd);
+        Intent i = getIntent();
+        String idUser = i.getStringExtra("id");
+        Log.d("idEdit:", idUser);
+        id = Integer.parseInt(idUser);
+        Log.d("idEdit:", id + "");
 
-        uploadImage.setOnClickListener(new View.OnClickListener() {
+        String street = i.getStringExtra("street");
+        String district = i.getStringExtra("district");
+        String ward = i.getStringExtra("ward");
+        String city = i.getStringExtra("city");
+
+        String price = i.getStringExtra("price");
+        String area = i.getStringExtra("area");
+        String description = i.getStringExtra("description");
+
+        etStreet = (EditText) findViewById(R.id.etEditStreet);
+        etDistrict = (EditText) findViewById(R.id.etEditDistrict);
+        etWard = (EditText) findViewById(R.id.etEditWard);
+        etCity = (EditText) findViewById(R.id.etEditCity);
+        etPrice = (EditText) findViewById(R.id.etEditPrice);
+        etArea = (EditText) findViewById(R.id.etEditArea);
+        etDescription = (EditText) findViewById(R.id.etEditRoomDes);
+        imgEditUpload = (ImageView) findViewById(R.id.imgEditUpload);
+        btnEdit = (Button) findViewById(R.id.btnEdit);
+        chosenFile = null;
+        etStreet.setText(street);
+        etDistrict.setText(district);
+        etWard.setText(ward);
+        etCity.setText(city);
+        etPrice.setText(price);
+        etArea.setText(area);
+        etDescription.setText(description);
+
+        imgEditUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onChooseImage();
@@ -91,70 +108,67 @@ public class AddRoom extends AppCompatActivity {
             }
         });
 
-        btnAdd.setOnClickListener(new View.OnClickListener() {
+        btnEdit.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
-                String city;
-                String ward;
-                String district;
-                String street;
-                String description;
-                String imgUrl;
-                int price;
-                double area;
-                int id;
-                int control = 0;
-
-                city = etAddCity.getText().toString();
-                ward = etAddWard.getText().toString();
-                district = etAddDistrict.getText().toString();
-                street = etAddStreet.getText().toString();
-                description = etAddRoomDes.getText().toString();
-                price = Integer.parseInt(etAddPrice.getText().toString());
-                area = Double.parseDouble(etAddArea.getText().toString());
-//                SharedPreferences sharedPreferences = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
-//                String userId = sharedPreferences.getString(Id, null);
-//                id = Integer.parseInt(userId);
+                if (id != 0) {
+                    String city;
+                    String ward;
+                    String district;
+                    String street;
+                    String description;
+                    String imgUrl;
+                    int price;
+                    double area;
 
 
-                uploadImage(control, AddRoom.this, city, ward, district, street, price, area, description);
+                    city = etCity.getText().toString();
+                    ward = etWard.getText().toString();
+                    district = etDistrict.getText().toString();
+                    street = etStreet.getText().toString();
+                    description = etDescription.getText().toString();
+                    price = Integer.parseInt(etPrice.getText().toString());
+                    area = Double.parseDouble(etArea.getText().toString());
 
-                if (chosenFile == null) {
-                    com.android.volley.Response.Listener<String> responseListener = new com.android.volley.Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            try {
-                                JSONObject jsonResponse = new JSONObject(response);
-                                boolean status = Boolean.parseBoolean(jsonResponse.opt("status").toString());
 
-                                if (status) {
+                    uploadImage(id, EditRoom.this, city, ward, district, street, price, area, description);
 
-                                    Intent intent = new Intent(AddRoom.this, MainActivity.class);
 
-                                    AddRoom.this.startActivity(intent);
-                                } else {
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(AddRoom.this);
-                                    builder.setMessage("Search Failed")
-                                            .setNegativeButton("Retry", null)
-                                            .create()
-                                            .show();
+                    if (chosenFile == null) {
+                        com.android.volley.Response.Listener<String> responseListener = new com.android.volley.Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                try {
+                                    JSONObject jsonResponse = new JSONObject(response);
+                                    boolean status = Boolean.parseBoolean(jsonResponse.opt("status").toString());
+
+                                    if (status) {
+
+                                        Intent intent = new Intent(EditRoom.this, MainActivity.class);
+
+                                        EditRoom.this.startActivity(intent);
+                                    } else {
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(EditRoom.this);
+                                        builder.setMessage("Search Failed")
+                                                .setNegativeButton("Retry", null)
+                                                .create()
+                                                .show();
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
                                 }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
                             }
-                        }
-                    };
+                        };
 
-                    AddRoomRequest addRoomRequest = new AddRoomRequest(city, ward, district, street, price, area, description, null, responseListener);
-                    RequestQueue queue = Volley.newRequestQueue(AddRoom.this);
-                    queue.add(addRoomRequest);
+                        EditRoomRequest editRoomRequest = new EditRoomRequest(id, city, ward, district, street, price, area, description, null, responseListener);
+                        RequestQueue queue = Volley.newRequestQueue(EditRoom.this);
+                        queue.add(editRoomRequest);
+                    }
                 }
-
             }
         });
 
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
@@ -185,7 +199,7 @@ public class AddRoom extends AppCompatActivity {
                 .load(chosenFile)
                 .placeholder(R.drawable.ic_menu_gallery)
                 .fit()
-                .into(uploadImage);
+                .into(imgEditUpload);
 
     }
 
@@ -195,11 +209,11 @@ public class AddRoom extends AppCompatActivity {
     }
 
     private void clearInput() {
-        uploadImage.setImageResource(R.drawable.ic_menu_gallery);
+        imgEditUpload.setImageResource(R.drawable.ic_menu_gallery);
     }
 
 
-    public void uploadImage(int control, Context context, String city, String ward, String district, String street, int price, double area, String description) {
+    public void uploadImage(int id, Context context, String city, String ward, String district, String street, int price, double area, String description) {
     /*
       Create the @Upload object
      */
@@ -209,7 +223,7 @@ public class AddRoom extends AppCompatActivity {
     /*
       Start upload
      */
-        new UploadService(this).Execute(control, context, city, ward, district, street, price, area, description, upload, new UiCallback());
+        new UploadService(this).Execute(id, context, city, ward, district, street, price, area, description, upload, new UiCallback());
     }
 
     private void createUpload(File image) {

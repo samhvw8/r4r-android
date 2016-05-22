@@ -51,7 +51,7 @@ public class SearchResult extends AppCompatActivity {
         ImageLoader.getInstance().init(config);
 
         //load JSON to ListView
-        lvRoom = (ListView) findViewById(R.id.lvSearchResult);
+        lvRoom = (ListView) findViewById(R.id.lvRoom);
 
         String response = intent.getStringExtra("response");
         JSONObject parentObject = null;
@@ -71,7 +71,7 @@ public class SearchResult extends AppCompatActivity {
                 roomModel.setDistrict(finalObject.getString("district"));
                 roomModel.setWard(finalObject.getString("ward"));
                 roomModel.setStreet(finalObject.getString("street"));
-                roomModel.setDescription(finalObject.getString("decripstion"));
+                roomModel.setDescription(finalObject.getString("description"));
                 roomModel.setArea(Double.parseDouble(finalObject.optString("area").toString()));
                 //get create day
                 String createDay = finalObject.getString("created_at");
