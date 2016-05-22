@@ -5,6 +5,8 @@ package com.R4RSS.models;
  */
 public class RoomModel {
 
+    private int id;
+    private int userId;
     private int price;
     private double area;
     private String description;
@@ -16,6 +18,22 @@ public class RoomModel {
     private String ward;
     private String city;
     private String created_day;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
 
     public String getCreated_day() {
         return created_day;

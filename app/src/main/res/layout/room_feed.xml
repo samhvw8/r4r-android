@@ -57,6 +57,19 @@
                     android:textSize="@dimen/feed_item_timestamp" />
             </LinearLayout>
 
+            <ImageButton
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:id="@+id/edit_room"
+                android:src="@android:drawable/ic_menu_edit" />
+
+
+            <ImageButton
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:id="@+id/delete_room"
+                android:src="@android:drawable/ic_menu_delete" />
+
 
         </LinearLayout>
 

@@ -42,8 +42,8 @@ public class RoomDetail extends AppCompatActivity {
         double lat;
         double lng;
 
-        lat = i.getDoubleExtra("lat",21);
-        lng = i.getDoubleExtra("lng",57);
+        lat = i.getDoubleExtra("lat", 21);
+        lng = i.getDoubleExtra("lng", 57);
         //make marker
         String address = i.getStringExtra("address");
 

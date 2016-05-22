@@ -109,6 +109,7 @@ public class HomeFragment extends Fragment {
                 String price = Integer.toString(room.getPrice()) + "VND\n";
                 String area = Double.toString(room.getArea()) + "m2\n";
                 String description = room.getDescription() + "\n";
+                String userId = Integer.toString(room.getUserId());
                 //get toa do vao activity RoomDetail
 //                String lat = Double.toString(room.getLatitude());
 //                String lng = Double.toString(room.getLongtitude());
@@ -121,6 +122,7 @@ public class HomeFragment extends Fragment {
                 intent.putExtra("description", description);
                 intent.putExtra("lat", lat);
                 intent.putExtra("lng", lng);
+                intent.putExtra("userId", userId);
                 startActivity(intent);
             }
         });
@@ -184,6 +186,8 @@ public class HomeFragment extends Fragment {
                     if (!finalObject.getString("image_album_url").equals("null"))
                         roomModel.setImage_album_url(finalObject.getString("image_album_url"));
 
+                    roomModel.setId(Integer.parseInt(finalObject.optString("id").toString()));
+                    roomModel.setUserId(Integer.parseInt(finalObject.optString("user_id").toString()));
                     roomModel.setPrice(Integer.parseInt(finalObject.optString("price").toString()));
                     roomModel.setCity(finalObject.getString("city"));
                     roomModel.setDistrict(finalObject.getString("district"));

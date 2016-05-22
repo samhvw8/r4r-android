@@ -119,9 +119,9 @@ public class LoginResult extends Fragment {
                                 }
                             };
 //
-                            DeleteUserRequest addRoomRequest = new DeleteUserRequest(GlobalValues.getId(), responseListener);
+                            DeleteUserRequest request = new DeleteUserRequest(GlobalValues.getId(), responseListener);
                             RequestQueue queue = Volley.newRequestQueue(context);
-                            queue.add(addRoomRequest);
+                            queue.add(request);
 
                         }
                         return true;
