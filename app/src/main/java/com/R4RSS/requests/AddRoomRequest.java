@@ -55,22 +55,4 @@ public class AddRoomRequest extends StringRequest {
         header.put("Authorization", auth);
         return header;
     }
-
-
-    @Override
-    protected Response parseNetworkResponse(NetworkResponse response) {
-        System.out.println(response.statusCode);
-        try {
-            Log.d("custom response", "[raw json]: " + (new String(response.data)));
-            Gson gson = new Gson();
-            String json = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
-            return Response.success(response.data,
-                    HttpHeaderParser.parseCacheHeaders(response));
-
-        } catch (UnsupportedEncodingException e) {
-            return Response.error(new ParseError(e));
-        } catch (JsonSyntaxException e) {
-            return Response.error(new ParseError(e));
-        }
-    }
 }
