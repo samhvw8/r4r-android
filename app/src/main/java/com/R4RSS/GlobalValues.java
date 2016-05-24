@@ -43,7 +43,7 @@ public class GlobalValues {
 
         initCon = context;
 
-        if(getStatus().equals("true")) {
+        if(getId() != -1) {
             USER_ROOM_REQUEST_URL = _USER_ROOM_REQUEST_URL + Integer.toString(getId()) + "/rooms";
         }
 
